@@ -25,37 +25,64 @@ import { Container } from "pixi.js";
   sprite.anchor.set(0.5);
   sprite.x = app.screen.width / 2;
   sprite.y = app.screen.height / 2;
-  // sprite.width = app.screen.width;
-  // sprite.height = app.screen.height;
-  // sprite.scale.set(1);
+  console.log("screen width:", app.screen.width);
+  console.log("sprite width:", sprite.width);
+  sprite.width = app.screen.width;
+  sprite.height = app.screen.height;
+  //  sprite.scale.set(1);
+  console.log("sprite width:", sprite.width);
   const container = new Container();
+  container.height = 500;
   app.stage.addChild(container);
   container.addChild(sprite);
 
   // Apply BulgePinchFilter
-  const filter = new BulgePinchFilter({
-    center: { x: 0.696, y: 0.5 }, // normalized center
-    radius: 50,
-    strength: 1,
-  });
-  const filter2 = new BulgePinchFilter({
-    center: { x: 0.6742, y: 0.42 }, // normalized center
-    radius: 50,
-    strength: 1,
-  });
+  const donFilterList = [
+    new BulgePinchFilter({
+      center: { x: 0.655, y: 0.555 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+  ];
+  const radius = 200;
+  const humberFilterList = [
+    new BulgePinchFilter({
+      center: { x: 0.15167862756540498, y: 0.6520889489798533 },
+      radius: 50,
+      strength: 1,
+    }),
+    new BulgePinchFilter({
+      center: { x: 0.12496472248213536, y: 0.629818067717745 },
+      radius: 50,
+      strength: 1,
+    }),
+    new BulgePinchFilter({
+      center: { x: 0.13222601128740347, y: 0.5890330108349535 },
+      radius: 50,
+      strength: 1,
+    }),
+    new BulgePinchFilter({
+      center: { x: 0.22135759355291823, y: 0.7953546654503301 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    new BulgePinchFilter({
+      center: { x: 0.16718015051600177, y: 0.7204515320271495 },
+      radius: 50,
+      strength: 1,
+    }),
+  ];
   const bpfilter = new BulgePinchFilter();
   bpfilter.radius = 250;
-  console.log("filter2:", filter);
-  container.filters = [filter, filter, filter, filter2, filter2, filter2];
-  console.log("container", container);
+  container.filters = [...donFilterList, ...humberFilterList];
   // app.renderer.on("error", console.error);
 
   // Animate the bulge effect
   let tick = 0;
   app.ticker.add((time) => {
     tick += time.deltaTime * 0.05;
-    filter.radius = 50 * Math.sin(tick); // bulge to pinch
-    filter2.radius = 100 * Math.sin(tick); // bulge to pinch
+    // filter.radius = 50 * Math.sin(tick); // bulge to pinch
+    // filter2.radius = 100 * Math.sin(tick); // bulge to pinch
 
     // console.log(filter.strength);
     // (container.filters.map(filter => console.log(filter.strength)));
@@ -64,10 +91,11 @@ import { Container } from "pixi.js";
   app.stage.eventMode = "static"; // enables interaction events
   sprite.eventMode = "static";
 
-  app.stage.on("pointermove", (event) => {
+  app.stage.on("pointerdown", (event) => {
     const global = event.global;
     const x = global.x / app.screen.width;
     const y = global.y / app.screen.height;
+    console.log(`click: { x: ${x}, y: ${y}}`);
     //filter.center = [x, y];
     // console.log(filter.center);
     // console.log(filter.strength);
