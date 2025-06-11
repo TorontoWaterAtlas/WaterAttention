@@ -37,44 +37,102 @@ import { Container } from "pixi.js";
   container.addChild(sprite);
 
   // Apply BulgePinchFilter
-  const donFilterList = [
-    new BulgePinchFilter({
-      center: { x: 0.655, y: 0.555 }, // normalized center
+  const bulgeFilters = {
+    donRiver: new BulgePinchFilter({
+      center: { x: 0.655, y: 0.5302 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-  ];
-  const radius = 200;
-  const humberFilterList = [
-    new BulgePinchFilter({
-      center: { x: 0.15167862756540498, y: 0.6520889489798533 },
+    humberRiver: new BulgePinchFilter({
+      center: { x: 0.135, y: 0.613 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-    new BulgePinchFilter({
-      center: { x: 0.12496472248213536, y: 0.629818067717745 },
+    blackCreek: new BulgePinchFilter({
+      center: { x: 0.1885, y: 0.4472 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-    new BulgePinchFilter({
-      center: { x: 0.13222601128740347, y: 0.5890330108349535 },
+    keatingChannel: new BulgePinchFilter({
+      center: { x: 0.712, y: 0.7051 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-    new BulgePinchFilter({
-      center: { x: 0.22135759355291823, y: 0.7953546654503301 }, // normalized center
+    mimicoCreek: new BulgePinchFilter({
+      center: { x: 0.144, y: 0.8316 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-    new BulgePinchFilter({
-      center: { x: 0.16718015051600177, y: 0.7204515320271495 },
+    mudCreek: new BulgePinchFilter({
+      center: { x: 0.61595, y: 0.3503 }, // normalized center
       radius: 50,
       strength: 1,
     }),
-  ];
+    taylorMasseyCreek: new BulgePinchFilter({
+      center: { x: 0.812, y: 0.2445 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    yellowCreek: new BulgePinchFilter({
+      center: { x: 0.5509, y: 0.365 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    nordheimerRavine: new BulgePinchFilter({
+      center: { x: 0.464, y: 0.392 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    cudmoreCreek: new BulgePinchFilter({
+      center: { x: 0.628, y: 0.3237 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    smallsCreek: new BulgePinchFilter({
+      center: { x: 0.8005, y: 0.4253 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    donRiverWestBranch: new BulgePinchFilter({
+      center: { x: 0.604, y: 0.0193 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    burkeBrook: new BulgePinchFilter({
+      center: { x: 0.6055, y: 0.0762 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    wilsonBrook: new BulgePinchFilter({
+      center: { x: 0.8375, y: 0.0163 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    curityCreek: new BulgePinchFilter({
+      center: { x: 0.7975, y: 0.217 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    ferrisCreek: new BulgePinchFilter({
+      center: { x: 0.8268, y: 0.2244 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    grenadierPond: new BulgePinchFilter({
+      center: { x: 0.25596, y: 0.74421 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+    catfishPond: new BulgePinchFilter({
+      center: { x: 0.24397, y: 0.86314 }, // normalized center
+      radius: 50,
+      strength: 1,
+    }),
+  };
+
   const bpfilter = new BulgePinchFilter();
   bpfilter.radius = 250;
-  container.filters = [...donFilterList, ...humberFilterList];
+  container.filters = Object.values(bulgeFilters);
   // app.renderer.on("error", console.error);
 
   // Animate the bulge effect
