@@ -1,67 +1,3 @@
-// import { Application, Assets, Sprite } from "pixi.js";
-// import {BulgePinchFilter} from '@pixi/filter-bulge-pinch';
-// import {Container} from 'pixi.js';
-//
-// (async () => {
-//   // Create a new application
-//   const app = new Application();
-//
-//   // Initialize the application
-//   await app.init({
-//     preference: 'webgl',background: "#1099bb", resizeTo: window });
-//
-//   // Append the application canvas to the document body
-//   document.getElementById("pixi-container").appendChild(app.canvas);
-//
-//     // Load a texture (you can change this URL to any image)
-//     const imageURL = 'https://raw.githubusercontent.com/TorontoWaterAtlas/WaterAttention/refs/heads/main/2025-05-05_13-49-19.png';
-//
-//     const texture = await Assets.load(imageURL);
-//     const sprite = new Sprite(texture);
-//     sprite.anchor.set(0.5);
-//     sprite.x = app.screen.width / 2;
-//     sprite.y = app.screen.height / 2;
-//     // sprite.width = app.screen.width;
-//     // sprite.height = app.screen.height;
-//   // sprite.scale.set(1);
-//     const container = new Container();
-//     container.addChild(sprite);
-//
-//     // Apply BulgePinchFilter
-//     const filter = new BulgePinchFilter({
-//       center: [0.5, 0.5], // normalized center
-//       radius: 900,
-//       strength: 1,
-//     });
-//
-//   sprite.filters = [filter];
-//   app.stage.addChild(sprite);
-//   app.renderer.on('error', console.error);
-//
-//     // Animate the bulge effect
-//     let tick = 0;
-//     app.ticker.add((time) => {
-//       tick += time.deltaTime * 0.5
-//       filter.strength = Math.sin(tick); // bulge to pinch
-//       // console.log(filter.strength);
-//       // (container.filters.map(filter => console.log(filter.strength)));
-//     });
-//   console.log(app.renderer.type);
-//   app.stage.eventMode = 'static'; // enables interaction events
-//   sprite.eventMode = 'static';
-//
-//   app.stage.on('pointermove', (event) => {
-//     const global = event.global;
-//     const x = global.x / app.screen.width;
-//     const y = global.y / app.screen.height;
-//     filter.center = [x, y];
-//     // console.log(filter.center);
-//     // console.log(filter.strength);
-//   });
-//
-//
-// })();
-
 import { Application, Assets, Sprite } from "pixi.js";
 import { BulgePinchFilter } from "pixi-filters";
 import { Container } from "pixi.js";
@@ -79,6 +15,14 @@ const waterBodiesData = [
   {
     name: "humberRiver",
     center: { x: 0.135, y: 0.613 },
+    yearlyData: {
+      2010: 31, 2011: 27, 2012: 35, 2013: 35, 2014: 35, 2015: 35, 2016: 38, 2017: 35,
+      2018: 36, 2019: 54, 2020: 59, 2021: 56, 2022: 81, 2023: 59, 2024: 51, 2025: 54
+    }
+  },
+  {
+    name: "humberRiver2",
+    center: { x: 0.075, y: 0.270 },
     yearlyData: {
       2010: 31, 2011: 27, 2012: 35, 2013: 35, 2014: 35, 2015: 35, 2016: 38, 2017: 35,
       2018: 36, 2019: 54, 2020: 59, 2021: 56, 2022: 81, 2023: 59, 2024: 51, 2025: 54
@@ -194,6 +138,22 @@ const waterBodiesData = [
     center: { x: 0.8268, y: 0.2244 },
     yearlyData: {
       2010: 0, 2011: 0, 2012: 0, 2013: 0, 2014: 0, 2015: 0, 2016: 0, 2017: 0,
+      2018: 0, 2019: 0, 2020: 0, 2021: 0, 2022: 0, 2023: 0, 2024: 0, 2025: 0
+    }
+  },
+  {
+   name: "Grenadier Pond",
+       center: { x: 0.25596, y: 0.74421 },
+   yearlyData: {
+       2010: 0, 2011: 0, 2012: 0, 2013: 0, 2015: 0, 2016: 0, 2017: 0,
+           2018: 0, 2019: 0, 2020: 0, 2021: 2, 2022: 0, 2023: 0, 2024: 0, 2025: 0
+     }
+   },
+  {
+    name: "Catfish Pond",
+    center: {x: 0.24397, y: 0.86314},
+    yearlyData: {
+      2010: 0, 2011: 0, 2012: 0, 2013: 0, 2015: 0, 2016: 0, 2017: 0,
       2018: 0, 2019: 0, 2020: 0, 2021: 0, 2022: 0, 2023: 0, 2024: 0, 2025: 0
     }
   }
