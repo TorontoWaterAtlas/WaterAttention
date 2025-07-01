@@ -573,6 +573,8 @@ function createNormalizedFilters(data, config) {
   let currentYear = 2022; // Start with 2022 as in your original data
   let bulgeFilters = {};
 
+  document.getElementById("currentyeartext").textContent = currentYear;
+
   // Function to update filters for a specific year
   function updateFiltersForYear(year) {
     console.log(`\n=== Updating to year ${year} ===`);
@@ -640,9 +642,17 @@ function createNormalizedFilters(data, config) {
     ];
     let yearIndex = years.indexOf(currentYear);
 
+    const timelineSlider = document.getElementById("timeline");
+    const currentYearText = document.getElementById("currentyeartext");
+    timelineSlider.max = years.length;
+    timelineSlider.value = yearIndex;
+    currentYearText.textContent = currentYear;
+
     autoPlayInterval = setInterval(() => {
       yearIndex = (yearIndex + 1) % years.length;
       updateFiltersForYear(years[yearIndex]);
+      timelineSlider.value = yearIndex;
+      currentYearText.textContent = currentYear;
     }, 1000); // Change year every second
   }
 
