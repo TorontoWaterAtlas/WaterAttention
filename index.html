@@ -10,15 +10,54 @@
       #description {
 	  position: absolute;
 	  padding: 10px 20px;
-	  background: white;
-	  color: black;
+	  background: #f7f7f6;
+	  color: #434343;
 	  top: 2vh;
 	  left: 3vw;
-	  border: 1px solid;
-	  max-width: 40vw;
-	  max-height: 18vh;
-	  font-size: 0.7em;
+	  border: 1px solid #99d4f2;
+      border-radius: 15px;
+	  max-width: 50vw;
+	  max-height: 50vh;
+	  font-size: 1em;
 	  overflow: hidden;
+      }
+
+      #info-box {
+          position: absolute;
+          top: 2vh;
+          right: 3vw;
+          background: #f0f0f2;
+          border: 2px solid #99d4f2;
+          border-radius: 15px;
+          padding: 10px 20px;
+          text-align: center;
+          font-family: Arial, sans-serif;
+          width: 120px;  /* Changed from min-width to fixed width */
+          height: 120px; /* Added fixed height to make it square */
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .info-number {
+          font-size: 1.5em;
+          font-weight: bold;
+          color: #f44b6a;
+          margin-bottom: 5px;
+      }
+
+      .info-text {
+          font-size: 1.2em;
+          color: #1d75a2;
+          margin-bottom: 5px;
+          line-height: 1.2;
+      }
+
+      .info-year {
+          font-size: 1.5em;
+          font-weight: bold;
+          color: #f44b6a;
       }
 
       #control {
@@ -68,6 +107,11 @@
 
 <body>
     <div id="description">Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present. The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear". This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention, leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map — use the slider or play/pause to explore over time, or hover to learn more.</div>
+    <div id="info-box">
+        <div class="info-number">256</div>
+        <div class="info-text">References to waterways in</div>
+        <div class="info-year">2012</div>
+    </div>
     <div id="app">
         <div id="pixi-container"></div>
     </div>
