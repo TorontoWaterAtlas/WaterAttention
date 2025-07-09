@@ -60,6 +60,34 @@
           color: #f44b6a;
       }
 
+      #data-sources-box {
+          position: absolute;
+          right: 2vw;
+          bottom: 25vh; /* Position above the control bar */
+          background: #f0f0f2;
+          border: 2px solid #99d4f2;
+          border-radius: 15px;
+          padding: 15px;
+          width: 200px;
+          max-height: 200px;
+          font-family: Arial, sans-serif;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          overflow-y: auto;
+      }
+
+      .data-sources-title {
+          font-size: 1.1em;
+          font-weight: bold;
+          color: #434343;
+          margin-bottom: 10px;
+      }
+
+      .data-sources-content {
+          font-size: 0.9em;
+          color: #434343;
+          line-height: 1.4;
+      }
+
       #control {
 	  position: absolute;
 	  bottom: 0;
@@ -111,6 +139,12 @@
         <div class="info-number">256</div>
         <div class="info-text">References to waterways in</div>
         <div class="info-year">2012</div>
+    </div>
+    <div id="data-sources-box">
+<!--        <div class="data-sources-title">Data sources:</div>-->
+        <div class="data-sources-content">
+            Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
+        </div>
     </div>
     <div id="app">
         <div id="pixi-container"></div>
