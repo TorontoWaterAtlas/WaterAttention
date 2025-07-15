@@ -1,0 +1,445 @@
+import "leaflet.timeline";
+
+(async () => {
+// Add your GeoJSON files as an array below.
+const geojsonFiles = [
+    {
+        "filename": "black_creek.geojson",
+        "color": "red",
+        "yearlyData": {
+            "2010": 57,
+            "2011": 65,
+            "2012": 55,
+            "2013": 52,
+            "2014": 53,
+            "2015": 51,
+            "2016": 52,
+            "2017": 55,
+            "2018": 40,
+            "2019": 36,
+            "2020": 33,
+            "2021": 16,
+            "2022": 34,
+            "2023": 40,
+            "2024": 36,
+            "2025": 41
+        }
+    },
+    {
+        "filename": "curity_creek.geojson",
+        "color": "green",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "humber_river.geojson",
+        "color": "yellow",
+        "yearlyData": {
+            "2010": 31,
+            "2011": 27,
+            "2012": 35,
+            "2013": 35,
+            "2014": 35,
+            "2015": 35,
+            "2016": 38,
+            "2017": 35,
+            "2018": 36,
+            "2019": 54,
+            "2020": 59,
+            "2021": 56,
+            "2022": 81,
+            "2023": 59,
+            "2024": 51,
+            "2025": 54
+        }
+    },
+    {
+        "filename": "smalls_creek.geojson",
+        "color": "blue",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "burke_brook.geojson",
+        "color": "orange",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "don_river.geojson",
+        "color": "purple",
+        "yearlyData": {
+            "2010": 1,
+            "2011": 1,
+            "2012": 8,
+            "2013": 10,
+            "2014": 13,
+            "2015": 12,
+            "2016": 10,
+            "2017": 12,
+            "2018": 9,
+            "2019": 6,
+            "2020": 5,
+            "2021": 10,
+            "2022": 3,
+            "2023": 7,
+            "2024": 8,
+            "2025": 9
+        }
+    },
+    {
+        "filename": "keating_channel.geojson",
+        "color": "cyan",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 1,
+            "2012": 0,
+            "2013": 0,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 0,
+            "2019": 0,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    },
+    {
+        "filename": "taylor_massey_creek.geojson",
+        "color": "magenta",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 1,
+            "2012": 1,
+            "2013": 1,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    },
+    {
+        "filename": "castle_frank_brook.geojson",
+        "color": "lime",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 1,
+            "2012": 1,
+            "2013": 1,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    },
+    {
+        "filename": "mimico_creek.geojson",
+        "color": "navy",
+        "yearlyData": {
+            "2010": 1,
+            "2011": 1,
+            "2012": 1,
+            "2013": 1,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    },
+    {
+        "filename": "wilson_brook.geojson",
+        "color": "teal",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "cudmore_creek.geojson",
+        "color": "lavender",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "ferris_creek.geojson",
+        "color": "brown",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 0,
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 0,
+            "2024": 0,
+            "2025": 0
+        }
+    },
+    {
+        "filename": "mud_creek.geojson",
+        "color": "black",
+        "yearlyData": {
+            "2010": 1,
+            "2011": 1,
+            "2012": 1,
+            "2013": 1,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    },
+    {
+        "filename": "yellow_creek.geojson",
+        "color": "olive",
+        "yearlyData": {
+            "2010": 0,
+            "2011": 0,
+            "2012": 1,
+            "2013": 1,
+            "2014": 1,
+            "2015": 1,
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2020": 1,
+            "2021": 1,
+            "2022": 1,
+            "2023": 1,
+            "2024": 1,
+            "2025": 1
+        }
+    }
+]
+
+const yearlyMin = {};
+const yearlyMax = {};
+let absMin = 1;
+let absMax = 1;
+geojsonFiles.forEach(file => {
+    for(const year in file["yearlyData"]) {
+        yearlyMin[year] = 1 + Math.min(yearlyMin[year] || Number.MAX_VALUE, file["yearlyData"][year]);
+        yearlyMax[year] = 1 + Math.max(yearlyMax[year] || Number.MIN_VALUE, file["yearlyData"][year]);
+        absMin = Math.min(absMin, yearlyMin[year]);
+        absMax = Math.max(absMax, yearlyMax[year]);
+    }
+});
+
+console.log(geojsonFiles);
+console.log(yearlyMin);
+console.log(yearlyMax);
+let map;
+
+function initMap() {
+  map = L.map('map', {zoomSnap: 0.1}).setView([43.71, -79.45], 12.2);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+    const timelineControl = L.timelineSliderControl({
+      formatOutput: function (date) {
+        return new Date(date).getFullYear();
+      },
+      enableKeyboardControls: true,
+      steps: 16,
+    });
+  timelineControl.addTo(map);
+  console.log("container", timelineControl.container.style["width"] = "90vw");
+  loadGeoJSONFiles(timelineControl);
+}
+
+function loadGeoJSONFiles(timelineControl) {
+  const list = document.getElementById('geojsonList');
+
+  geojsonFiles.forEach((file) => loadGeoJSON(timelineControl, file));
+}
+
+function normalizeValue(value, minVal, maxVal, targetMin, targetMax, useLog = false) {
+  // Handle edge case where all values are the same
+  if (maxVal === minVal) {
+    return (targetMin + targetMax) / 2;
+  }
+
+  let normalizedInput;
+
+  if (useLog) {
+    // Add 1 to avoid log(0), then apply logarithm
+    const logValue = Math.log(value + 1);
+    const logMin = Math.log(minVal + 1);
+    const logMax = Math.log(maxVal + 1);
+    normalizedInput = (logValue - logMin) / (logMax - logMin);
+  } else {
+    // Linear normalization
+    normalizedInput = (value - minVal) / (maxVal - minVal);
+  }
+
+  // Scale to target range: n * (M - m) + m
+  return normalizedInput * (targetMax - targetMin) + targetMin;
+}
+
+
+function loadGeoJSON(timelineControl, file) {
+  fetch(`data/${file['filename']}`)
+    .then((response) => response.json())
+    .then((data) => {
+//      L.geoJSON(data, { style: (feature) => ({ color, weight: 10 }) }).addTo(map);
+//      map.fitBounds(data.bounds);
+        const timeline = L.timeline(data, {
+            style: (feature) => ({
+                color: file['color'],
+                weight: 35
+            }),
+            getInterval: (feature) => ({ start: new Date(2010, 0, 1).getTime(), end: new Date(2025, 0, 1).getTime()}),
+            waitToUpdateMap: true,
+            onEachFeature: function (feature, layer) {
+                const year = new Date(timelineControl.time).getFullYear();
+                layer.bindTooltip(`${feature.properties.tags.name} (${file["yearlyData"][year]} references in ${year})`);
+            },
+        });
+        timeline.addTo(map);
+        timeline.on("change", e => {
+            const year = new Date(timelineControl.time).getFullYear();
+            e.target.eachLayer(layer => {
+                layer.setStyle({
+                    color: 'blue',
+                    weight: normalizeValue(
+                        file["yearlyData"][year],
+                        absMin, //yearlyMin[year],
+                        absMax, //yearlyMax[year],
+                        5, 65
+                    ) // 10 + file["yearlyData"][year]
+               });
+               layer.bindTooltip(`${layer.feature.properties.tags.name} (${file["yearlyData"][year]} references in ${year})`);
+            });
+        });
+        timelineControl.addTimelines(timeline);
+    })
+    .catch((error) => console.log('Error loading GeoJSON file:', filename, error))
+    ;
+}
+
+initMap();
+})();
