@@ -437,6 +437,15 @@ const config = {
   },
 };
 
+// Function to calculate total references for a given year
+function getTotalReferencesForYear(year) {
+  let total = 0;
+  waterBodiesData.forEach(waterBody => {
+    total += waterBody.yearlyData[year] || 0;
+  });
+  return total;
+}
+
 // Normalization functions
 function normalizeValue(
   value,
@@ -529,6 +538,8 @@ function createNormalizedFilters(data, config) {
       strength: normalizedStrength,
     });
 
+
+
     const effectType = normalizedStrength < 0 ? "PINCH" : "BULGE";
     console.log(
       `${item.name}: trends=${item.googleTrends}, radius=${normalizedRadius.toFixed(1)}, strength=${normalizedStrength.toFixed(2)} (${effectType})`,
@@ -537,6 +548,8 @@ function createNormalizedFilters(data, config) {
 
   return filters;
 }
+
+
 
 (async () => {
   // Create a new application
@@ -587,7 +600,139 @@ function createNormalizedFilters(data, config) {
 
     console.log(`Applied ${filterArray.length} filters for year ${year}`);
     currentYear = year;
+
+    // Update the info box with total references
+    const totalReferences = getTotalReferencesForYear(year);
+    const infoNumber = document.querySelector('.info-number');
+    const infoYear = document.querySelector('.info-year');
+
+    if (infoNumber && infoYear) {
+      infoNumber.textContent = totalReferences;
+      infoYear.textContent = year;
+    }
+
+    // Update year display text
+    document.getElementById("currentyeartext").textContent = year;
   }
+
+  // Get button elements
+  const playBtn = document.getElementById('play-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const timelineSlider = document.getElementById('timeline');
+  const currentYearText = document.getElementById('currentyeartext');
+
+// Years array
+  const years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+
+// Set up slider
+  timelineSlider.max = years.length - 1;
+  timelineSlider.value = years.indexOf(currentYear);
+
+// Update year display and position
+  function updateYearDisplay(year) {
+    const yearDisplay = document.getElementById('currentyeartext');
+    const slider = document.getElementById('timeline');
+
+    yearDisplay.textContent = year;
+
+    // Calculate position based on slider value
+    const sliderValue = slider.value;
+    const sliderMax = slider.max;
+    const sliderWidth = slider.offsetWidth;
+
+    // Calculate percentage and position
+    const percentage = sliderValue / sliderMax;
+    const position = percentage * sliderWidth;
+
+    // Update year display position
+    yearDisplay.style.left = position + 'px';
+  }
+
+// Updated auto-play functionality
+  let autoPlayInterval = null;
+  let isPlaying = false;
+
+  function startAutoPlay() {
+    if (isPlaying) return;
+
+    isPlaying = true;
+    playBtn.style.display = 'none';
+    pauseBtn.style.display = 'flex';
+
+    let yearIndex = years.indexOf(currentYear);
+
+    autoPlayInterval = setInterval(() => {
+      yearIndex = (yearIndex + 1) % years.length;
+      updateFiltersForYear(years[yearIndex]);
+      timelineSlider.value = yearIndex;
+      updateYearDisplay(currentYear);
+    }, 1000);
+  }
+
+  function stopAutoPlay() {
+    if (!isPlaying) return;
+
+    isPlaying = false;
+    playBtn.style.display = 'flex';
+    pauseBtn.style.display = 'none';
+
+    if (autoPlayInterval) {
+      clearInterval(autoPlayInterval);
+      autoPlayInterval = null;
+    }
+  }
+
+// Button event listeners
+  playBtn.addEventListener('click', startAutoPlay);
+  pauseBtn.addEventListener('click', stopAutoPlay);
+
+// Slider event listener
+  timelineSlider.addEventListener('input', (e) => {
+    const yearIndex = parseInt(e.target.value);
+    const selectedYear = years[yearIndex];
+    updateFiltersForYear(selectedYear);
+    updateYearDisplay(currentYear);
+
+    // Stop auto-play when user manually changes slider
+    if (isPlaying) {
+      stopAutoPlay();
+    }
+  });
+
+// Update the existing keyboard controls to work with new play/pause buttons
+  window.addEventListener("keydown", (event) => {
+    const currentIndex = years.indexOf(currentYear);
+
+    switch (event.key) {
+      case "ArrowLeft":
+      case "ArrowDown":
+        if (currentIndex > 0) {
+          updateFiltersForYear(years[currentIndex - 1]);
+          timelineSlider.value = currentIndex - 1;
+          updateYearDisplay(currentYear);
+          if (isPlaying) stopAutoPlay();
+        }
+        break;
+      case "ArrowRight":
+      case "ArrowUp":
+        if (currentIndex < years.length - 1) {
+          updateFiltersForYear(years[currentIndex + 1]);
+          timelineSlider.value = currentIndex + 1;
+          updateYearDisplay(currentYear);
+          if (isPlaying) stopAutoPlay();
+        }
+        break;
+      case " ":
+        event.preventDefault();
+        if (isPlaying) {
+          stopAutoPlay();
+        } else {
+          startAutoPlay();
+        }
+        break;
+    }
+  });
+
 
   // Initialize with starting year
   updateFiltersForYear(currentYear);
@@ -596,100 +741,101 @@ function createNormalizedFilters(data, config) {
   // Animation will be added later for year-by-year data transitions
 
   // Interactive year controls via keyboard
-  window.addEventListener("keydown", (event) => {
-    const availableYears = [
-      2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
-      2022, 2023, 2024, 2025,
-    ];
-    const currentIndex = availableYears.indexOf(currentYear);
+  // window.addEventListener("keydown", (event) => {
+  //   const availableYears = [
+  //     2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+  //     2022, 2023, 2024, 2025,
+  //   ];
+  //   const currentIndex = availableYears.indexOf(currentYear);
+  //
+  //   switch (event.key) {
+  //     case "ArrowLeft":
+  //     case "ArrowDown":
+  //       // Go to previous year
+  //       if (currentIndex > 0) {
+  //         updateFiltersForYear(availableYears[currentIndex - 1]);
+  //       }
+  //       break;
+  //     case "ArrowRight":
+  //     case "ArrowUp":
+  //       // Go to next year
+  //       if (currentIndex < availableYears.length - 1) {
+  //         updateFiltersForYear(availableYears[currentIndex + 1]);
+  //       }
+  //       break;
+  //     case " ": // Spacebar for auto-play
+  //       event.preventDefault();
+  //       startAutoPlay();
+  //       break;
+  //   }
+  // });
 
-    switch (event.key) {
-      case "ArrowLeft":
-      case "ArrowDown":
-        // Go to previous year
-        if (currentIndex > 0) {
-          updateFiltersForYear(availableYears[currentIndex - 1]);
-        }
-        break;
-      case "ArrowRight":
-      case "ArrowUp":
-        // Go to next year
-        if (currentIndex < availableYears.length - 1) {
-          updateFiltersForYear(availableYears[currentIndex + 1]);
-        }
-        break;
-      case " ": // Spacebar for auto-play
-        event.preventDefault();
-        startAutoPlay();
-        break;
-    }
-  });
 
   // Auto-play functionality
-  let autoPlayInterval = null;
-  function startAutoPlay() {
-    if (autoPlayInterval) {
-      clearInterval(autoPlayInterval);
-      autoPlayInterval = null;
-      console.log("Auto-play stopped");
-      return;
-    }
-
-    console.log("Auto-play started - press spacebar again to stop");
-    const years = [
-      2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
-      2022, 2023, 2024, 2025,
-    ];
-    let yearIndex = years.indexOf(currentYear);
-
-    const timelineSlider = document.getElementById("timeline");
-    const currentYearText = document.getElementById("currentyeartext");
-    timelineSlider.max = years.length;
-    timelineSlider.value = yearIndex;
-    currentYearText.textContent = currentYear;
-
-    autoPlayInterval = setInterval(() => {
-      yearIndex = (yearIndex + 1) % years.length;
-      updateFiltersForYear(years[yearIndex]);
-      timelineSlider.value = yearIndex;
-      currentYearText.textContent = currentYear;
-    }, 1000); // Change year every second
-  }
-
-  // Interactive features for clicking
-  app.stage.eventMode = "static";
-  sprite.eventMode = "static";
-
-  app.stage.on("pointerdown", (event) => {
-    const global = event.global;
-    const x = global.x / app.screen.width;
-    const y = global.y / app.screen.height;
-    console.log(
-      `\nClick coordinates: { x: ${x.toFixed(5)}, y: ${y.toFixed(5)} }`,
-    );
-
-    // Find the closest water body to the click
-    let closestBody = null;
-    let minDistance = Infinity;
-
-    waterBodiesData.forEach((body) => {
-      const distance = Math.sqrt(
-        Math.pow(body.center.x - x, 2) + Math.pow(body.center.y - y, 2),
-      );
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestBody = body;
-      }
-    });
-
-    if (closestBody && minDistance < 0.1) {
-      // Within reasonable distance
-      const trendsValue = closestBody.yearlyData[currentYear];
-      console.log(`Closest water body: ${closestBody.name}`);
-      console.log(`${currentYear} Google Trends: ${trendsValue}`);
-      console.log(`Historical data:`, closestBody.yearlyData);
-    }
-  });
+  // let autoPlayInterval = null;
+  // function startAutoPlay() {
+  //   if (autoPlayInterval) {
+  //     clearInterval(autoPlayInterval);
+  //     autoPlayInterval = null;
+  //     console.log("Auto-play stopped");
+  //     return;
+  //   }
+  //
+  //   console.log("Auto-play started - press spacebar again to stop");
+  //   const years = [
+  //     2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+  //     2022, 2023, 2024, 2025,
+  //   ];
+  //   let yearIndex = years.indexOf(currentYear);
+  //
+  //   const timelineSlider = document.getElementById("timeline");
+  //   const currentYearText = document.getElementById("currentyeartext");
+  //   timelineSlider.max = years.length;
+  //   timelineSlider.value = yearIndex;
+  //   currentYearText.textContent = currentYear;
+  //
+  //   autoPlayInterval = setInterval(() => {
+  //     yearIndex = (yearIndex + 1) % years.length;
+  //     updateFiltersForYear(years[yearIndex]);
+  //     timelineSlider.value = yearIndex;
+  //     currentYearText.textContent = currentYear;
+  //   }, 1000); // Change year every second
+  // }
+  //
+  // // Interactive features for clicking
+  // app.stage.eventMode = "static";
+  // sprite.eventMode = "static";
+  //
+  // app.stage.on("pointerdown", (event) => {
+  //   const global = event.global;
+  //   const x = global.x / app.screen.width;
+  //   const y = global.y / app.screen.height;
+  //   console.log(
+  //     `\nClick coordinates: { x: ${x.toFixed(5)}, y: ${y.toFixed(5)} }`,
+  //   );
+  //
+  //   // Find the closest water body to the click
+  //   let closestBody = null;
+  //   let minDistance = Infinity;
+  //
+  //   waterBodiesData.forEach((body) => {
+  //     const distance = Math.sqrt(
+  //       Math.pow(body.center.x - x, 2) + Math.pow(body.center.y - y, 2),
+  //     );
+  //     if (distance < minDistance) {
+  //       minDistance = distance;
+  //       closestBody = body;
+  //     }
+  //   });
+  //
+  //   if (closestBody && minDistance < 0.1) {
+  //     // Within reasonable distance
+  //     const trendsValue = closestBody.yearlyData[currentYear];
+  //     console.log(`Closest water body: ${closestBody.name}`);
+  //     console.log(`${currentYear} Google Trends: ${trendsValue}`);
+  //     console.log(`Historical data:`, closestBody.yearlyData);
+  //   }
+  // });
 
   // Display current year info
   console.log("\n=== CONTROLS ===");

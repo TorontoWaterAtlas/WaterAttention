@@ -7,154 +7,327 @@
     <link rel="stylesheet" href="/style.css">
     <title>PixiJS - Template</title>
     <style>
-      #description {
-	  position: absolute;
-	  padding: 10px 20px;
-	  background: #f7f7f6;
-	  color: #434343;
-	  top: 2vh;
-	  left: 3vw;
-	  border: 1px solid #99d4f2;
-      border-radius: 15px;
-	  max-width: 50vw;
-	  max-height: 50vh;
-	  font-size: 1em;
-	  overflow: hidden;
-      }
+        #description {
+            position: absolute;
+            padding: 10px 20px;
+            background: #f7f7f6;
+            color: #434343;
+            top: 2vh;
+            left: 3vw;
+            border: 1px solid #99d4f2;
+            border-radius: 15px;
+            max-width: 50vw;
+            max-height: 50vh;
+            font-size: 1em;
+            overflow: hidden;
+        }
 
-      #info-box {
-          position: absolute;
-          top: 2vh;
-          right: 3vw;
-          background: #f0f0f2;
-          border: 2px solid #99d4f2;
-          border-radius: 15px;
-          padding: 10px 20px;
-          text-align: center;
-          font-family: Arial, sans-serif;
-          width: 120px;  /* Changed from min-width to fixed width */
-          height: 120px; /* Added fixed height to make it square */
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
+        #info-box {
+            position: absolute;
+            top: 2vh;
+            right: 3vw;
+            background: #f0f0f2;
+            border: 2px solid #99d4f2;
+            border-radius: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-      .info-number {
-          font-size: 1.5em;
-          font-weight: bold;
-          color: #f44b6a;
-          margin-bottom: 5px;
-      }
+        .info-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+            margin-bottom: 5px;
+        }
 
-      .info-text {
-          font-size: 1.2em;
-          color: #1d75a2;
-          margin-bottom: 5px;
-          line-height: 1.2;
-      }
+        .info-text {
+            font-size: 1.2em;
+            color: #99d4f2;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
 
-      .info-year {
-          font-size: 1.5em;
-          font-weight: bold;
-          color: #f44b6a;
-      }
+        .info-year {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+        }
 
-      #data-sources-box {
-          position: absolute;
-          right: 2vw;
-          bottom: 25vh; /* Position above the control bar */
-          background: #f0f0f2;
-          border: 2px solid #99d4f2;
-          border-radius: 15px;
-          padding: 15px;
-          width: 200px;
-          max-height: 200px;
-          font-family: Arial, sans-serif;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          overflow-y: auto;
-      }
+        #data-sources-box {
+            position: absolute;
+            right: 2vw;
+            bottom: 25vh;
+            background: #f0f0f2;
+            border: 2px solid #99d4f2;
+            border-radius: 15px;
+            padding: 15px;
+            width: 200px;
+            max-height: 200px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
 
-      .data-sources-title {
-          font-size: 1.1em;
-          font-weight: bold;
-          color: #434343;
-          margin-bottom: 10px;
-      }
+        .data-sources-content {
+            font-size: 0.9em;
+            color: #434343;
+            line-height: 1.4;
+        }
 
-      .data-sources-content {
-          font-size: 0.9em;
-          color: #434343;
-          line-height: 1.4;
-      }
+        .data-sources-content a {
+            color: #434343;
+            text-decoration: none;
+        }
 
-      #control {
-	  position: absolute;
-	  bottom: 0;
-	  background: white;
-	  width: 100%;
-	  min-height: 75px;
-	  color: black;
-      }
+        .data-sources-content a:hover {
+            text-decoration: underline;
+        }
 
-      .slidecontainer {
-	  width: 80%; /* Width of the outside container */
-      }
+        #control {
+            position: absolute;
+            bottom: 0;
+            background: #f7f7f6;
+            width: 100%;
+            height: 120px;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-sizing: border-box;
+            border-top: 1px solid #99d4f2;
+        }
 
-      .slider {
-	  -webkit-appearance: none;
-	  width: 100%;
-	  height: 15px;
-	  border-radius: 5px;  
-	  background: #d3d3d3;
-	  outline: none;
-	  opacity: 0.7;
-	  -webkit-transition: .2s;
-	  transition: opacity .2s;
-      }
+        .control-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-      .slider::-webkit-slider-thumb {
-	  -webkit-appearance: none;
-	  appearance: none;
-	  width: 25px;
-	  height: 25px;
-	  border-radius: 50%; 
-	  background: #04AA6D;
-	  cursor: pointer;
-      }
+        .built-for {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
 
-      .slider::-moz-range-thumb {
-	  width: 25px;
-	  height: 25px;
-	  border-radius: 50%;
-	  background: #04AA6D;
-	  cursor: pointer;
-      }
+        .organization {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #434343;
+        }
+
+        .control-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .play-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .play-btn, .pause-btn {
+            background: #e892a2;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover, .pause-btn:hover {
+            background: #d67a94;
+        }
+
+        .slidecontainer {
+            width: 50vw;
+            position: relative;
+        }
+
+        .year-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+            position: absolute;
+            top: -25px;
+            left: 0;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e892a2;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e892a2;
+            cursor: pointer;
+            border: none;
+        }
+
+        .research-credits {
+            font-size: 0.9em;
+            color: #434343;
+            text-align: center;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
+
+        .research-credits a {
+            color: #434343;
+            text-decoration: none;
+        }
+
+        .research-credits a:hover {
+            text-decoration: underline;
+        }
+
+        .control-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .powered-by {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .pixi-link a {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #434343;
+            text-decoration: none;
+        }
+
+        .pixi-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hover box styling */
+        #hover-box {
+            position: absolute;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: sans-serif;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 999;
+            border: 1px solid #99d4f2;
+            max-width: 250px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="description">Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present. The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear". This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention, leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map — use the slider or play/pause to explore over time, or hover to learn more.</div>
-    <div id="info-box">
-        <div class="info-number">256</div>
-        <div class="info-text">References to waterways in</div>
-        <div class="info-year">2012</div>
+<div id="description">Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present. The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear". This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention, leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map — use the slider or play/pause to explore over time, or hover to learn more.</div>
+
+<div id="info-box">
+    <div class="info-number">119</div>
+    <div class="info-text">References to waterways in</div>
+    <div class="info-year">2022</div>
+</div>
+
+<div id="data-sources-box">
+    <div class="data-sources-content">
+        Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
     </div>
-    <div id="data-sources-box">
-<!--        <div class="data-sources-title">Data sources:</div>-->
-        <div class="data-sources-content">
-            Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
+</div>
+
+<div id="app">
+    <div id="pixi-container"></div>
+    <div id="hover-box"></div>
+</div>
+
+<div id="control">
+    <div class="control-left">
+        <div class="built-for">Built for</div>
+        <div class="organization">Toronto Water Atlas</div>
+    </div>
+
+    <div class="control-center">
+        <div class="play-controls">
+            <button class="play-btn" id="play-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path d="M2 2L10 6L2 10V2Z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="pause-btn" id="pause-btn" style="display: none;">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <rect x="2" y="2" width="3" height="8" fill="currentColor"/>
+                    <rect x="7" y="2" width="3" height="8" fill="currentColor"/>
+                </svg>
+            </button>
+            <div class="slidecontainer">
+                <div class="year-display" id="currentyeartext">2022</div>
+                <input type="range" min="0" max="15" value="12" class="slider" id="timeline">
+            </div>
+        </div>
+        <div class="research-credits">
+            Research and map by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>
         </div>
     </div>
-    <div id="app">
-        <div id="pixi-container"></div>
+
+    <div class="control-right">
+        <div class="powered-by">Powered by</div>
+        <div class="pixi-link">
+            <a href="https://pixijs.com" target="_blank">PixiJS</a>
+        </div>
     </div>
-    <div id="control">
-      <div class="slidecontainer">
-	<input type="range" min="0" max="100" value="0" class="slider" id="timeline">
-      </div>
-      <div id="currentyeartext" >hello</div>
-    </div>
-    <script type="module" src="/src/main.js"></script>
+</div>
+
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>
