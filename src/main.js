@@ -221,14 +221,18 @@ function createNormalizedFilters(data, config) {
 
     if (closestBody && minDistance < 0.08) {
       const value =
-        dataSourceType === "journal"
-          ? closestBody.yearlyDataJournal[currentYear]
-          : closestBody.yearlyData[currentYear];
+          dataSourceType === "journal"
+              ? closestBody.yearlyDataJournal[currentYear]
+              : closestBody.yearlyData[currentYear];
       const name = formatWaterBodyName(closestBody.name);
       const effectDescription = getEffectDescription(value);
 
-      // Updated hover box HTML with your design requirements
-      hoverBox.innerHTML = `
+      // Check if there's news data for this water body and year
+      const hasNewsData = closestBody.newsData && closestBody.newsData[currentYear];
+      const newsData = hasNewsData ? closestBody.newsData[currentYear] : null;
+
+      // Create hover box content
+      let hoverContent = `
       <div style="
         background: #c5f3c4; 
         color: #000000; 
@@ -244,18 +248,68 @@ function createNormalizedFilters(data, config) {
         color: #434343; 
         font-size: 13px; 
         line-height: 1.4;
+        margin-bottom: 8px;
       ">
         ${effectDescription}
       </div>
     `;
 
+      // Add newspaper headline if available
+      if (newsData) {
+        hoverContent += `
+        <div style="
+          border-top: 1px solid #99d4f2;
+          padding-top: 8px;
+          margin-top: 8px;
+        ">
+          <div style="
+            font-weight: bold; 
+            color: #434343; 
+            font-size: 12px;
+            margin-bottom: 4px;
+          ">
+            📰 Featured News:
+          </div>
+          <div style="
+            color: #434343; 
+            font-size: 11px; 
+            line-height: 1.3;
+            font-style: italic;
+          ">
+            "${newsData.headline}"
+          </div>
+          ${newsData.description ? `
+            <div style="
+              color: #666; 
+              font-size: 10px; 
+              margin-top: 4px;
+              line-height: 1.2;
+            ">
+              ${newsData.description.length > 100 ?
+            newsData.description.substring(0, 100) + '...' :
+            newsData.description}
+            </div>
+          ` : ''}
+          <div style="
+            color: #666; 
+            font-size: 10px; 
+            margin-top: 4px;
+          ">
+            — ${newsData.source}${newsData.author && newsData.author !== newsData.source ? `, ${newsData.author}` : ''}
+          </div>
+        </div>
+      `;
+      }
+
+      hoverBox.innerHTML = hoverContent;
+
       // Position the hover box
       let leftPos = global.x + 15;
       let topPos = global.y + 15;
 
-      // Adjust if too close to edges
-      const boxWidth = 280;
-      const boxHeight = 80;
+      // Adjust if too close to edges (larger box for news content)
+      const boxWidth = hasNewsData ? 350 : 280;
+      const boxHeight = hasNewsData ? 120 : 80;
 
       if (leftPos + boxWidth > window.innerWidth) {
         leftPos = global.x - boxWidth - 15;
@@ -268,6 +322,7 @@ function createNormalizedFilters(data, config) {
       hoverBox.style.left = `${leftPos}px`;
       hoverBox.style.top = `${topPos}px`;
       hoverBox.style.display = "block";
+      hoverBox.style.maxWidth = `${boxWidth}px`;
     } else {
       hoverBox.style.display = "none";
     }

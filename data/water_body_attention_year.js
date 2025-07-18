@@ -39,6 +39,46 @@ export const waterBodiesData = [
       2024: 49,
       2025: 9,
     },
+    newsData: {
+      2010: {
+        headline: "The Don: Many faces, a bad smell the fixer",
+        description: "About 600 people in canoes and kayaks traversed the Don River Sunday, with some raising money to be used for river restoration projects.",
+        author: "Jack Lakey",
+        source: "Toronto Star"
+      },
+      2013: {
+        headline: "'A kid you wished was yours': Victim in Don River drowning was well-loved high school student",
+        description: "Tragic drowning incident in the Don River involving a beloved high school student.",
+        author: "Barnard, Linda; Bosanac, Alexandra",
+        source: "Toronto Star"
+      },
+      2016: {
+        headline: "The dawning of the new Don River Valley Park",
+        description: "The Lower Don Trail was closed a long time. Two summers came and went. When it finally reopened last month there was relief, but also great fanfare because it coincided with the opening of the new Don River Valley Park.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/news/gta/the-dawning-of-the-new-don-river-valley-park-micallef/article_fd9d24ee-747e-5ae1-b479-6d3906eed155.html"
+      },
+      2017: {
+        headline: "New river valley taking shape",
+        description: "The huge floodproofing project that will transform the east downtown waterfront is slated to open in April 2024. The Star got a sneak peek at how it's progressing.",
+        author: "Toronto Star",
+        source: "Toronto Star"
+      },
+      2020: {
+        headline: "New river valley taking shape: The huge floodproofing project that will transform the east downtown waterfront",
+        description: "Major infrastructure project updates for the Don River valley transformation.",
+        author: "Toronto Star",
+        source: "Toronto Star"
+      },
+      2024: {
+        headline: "Fallen trees, mudslides, missing deer: How Toronto's flood impacted Don Valley wildlife",
+        description: "How Toronto's flood impacted Don Valley wildlife — and why finding goldfish has experts worried.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/news/gta/fallen-trees-mudslides-missing-deer-how-torontos-flood-impacted-don-valley-wildlife-and-why-finding/article_b46d62aa-4545-11ef-ac84-13dcec5fec39.html"
+      }
+    }
   },
   {
     name: "humberRiver",
