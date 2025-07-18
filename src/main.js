@@ -331,6 +331,7 @@ function createNormalizedFilters(data, config) {
   // Get UI elements
   const playBtn = document.getElementById("play-btn");
   const pauseBtn = document.getElementById("pause-btn");
+  const dataSourceToggle = document.getElementById("datasource-toggle");
   const timelineSlider = document.getElementById("timeline");
   const years = [
     2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
@@ -379,6 +380,14 @@ function createNormalizedFilters(data, config) {
   if (playBtn && pauseBtn) {
     playBtn.addEventListener("click", startAutoPlay);
     pauseBtn.addEventListener("click", stopAutoPlay);
+  }
+
+  if (dataSourceToggle) {
+    dataSourceToggle.addEventListener("change", () => {
+      dataSourceType = dataSourceToggle.checked ? "journal" : "";
+      updateFiltersForYear(currentYear);
+      updateYearDisplay(currentYear);
+    });
   }
 
   // Slider event listener
