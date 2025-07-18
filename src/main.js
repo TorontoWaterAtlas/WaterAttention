@@ -382,6 +382,28 @@ function getTotalReferencesForYear(year) {
   return total;
 }
 
+// Function to format water body names for display
+function formatWaterBodyName(name) {
+  // Convert camelCase to readable format
+  return name
+    .replace(/([A-Z])/g, " $1") // Add space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+    .trim();
+}
+
+// Function to get effect description based on value
+function getEffectDescription(value) {
+  if (value === 0) {
+    return "No references (0) - appears pinched on the map";
+  } else if (value >= 1 && value <= 10) {
+    return `Low attention (1-10 references) - slightly enlarged`;
+  } else if (value >= 11 && value <= 40) {
+    return `Moderate attention (11-40 references) - noticeably enlarged`;
+  } else {
+    return `High attention (40+ references) - significantly enlarged`;
+  }
+}
+
 // Normalization functions
 function normalizeValue(
   value,
@@ -514,6 +536,87 @@ function createNormalizedFilters(data, config) {
   app.stage.addChild(container);
   container.addChild(sprite);
 
+  // Make sure stage is interactive
+  app.stage.eventMode = "static";
+  app.stage.hitArea = app.screen;
+  sprite.eventMode = "static";
+
+  app.stage.on("pointermove", (event) => {
+    const global = event.global;
+    const x = global.x / app.screen.width;
+    const y = global.y / app.screen.height;
+
+    const hoverBox = document.getElementById("hover-box");
+
+    if (!hoverBox) {
+      console.error("Hover box element not found!");
+      return;
+    }
+
+    let closestBody = null;
+    let minDistance = Infinity;
+
+    for (const body of waterBodiesData) {
+      const dx = body.center.x - x;
+      const dy = body.center.y - y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestBody = body;
+      }
+    }
+
+    if (closestBody && minDistance < 0.08) {
+      const value = closestBody.yearlyData[currentYear] ?? 0;
+      const name = formatWaterBodyName(closestBody.name);
+      const effectDescription = getEffectDescription(value);
+
+      // Updated hover box HTML with your design requirements
+      hoverBox.innerHTML = `
+      <div style="
+        background: #c5f3c4; 
+        color: #000000; 
+        font-weight: bold; 
+        padding: 4px 8px; 
+        margin: -8px -12px 8px -12px; 
+        border-radius: 6px 6px 0 0;
+        font-size: 14px;
+      ">
+        ${name} in year ${currentYear}:
+      </div>
+      <div style="
+        color: #434343; 
+        font-size: 13px; 
+        line-height: 1.4;
+      ">
+        ${effectDescription}
+      </div>
+    `;
+
+      // Position the hover box
+      let leftPos = global.x + 15;
+      let topPos = global.y + 15;
+
+      // Adjust if too close to edges
+      const boxWidth = 280;
+      const boxHeight = 80;
+
+      if (leftPos + boxWidth > window.innerWidth) {
+        leftPos = global.x - boxWidth - 15;
+      }
+
+      if (topPos + boxHeight > window.innerHeight) {
+        topPos = global.y - boxHeight - 15;
+      }
+
+      hoverBox.style.left = `${leftPos}px`;
+      hoverBox.style.top = `${topPos}px`;
+      hoverBox.style.display = "block";
+    } else {
+      hoverBox.style.display = "none";
+    }
+  });
+
   // Year control variables
   let currentYear = 2022; // Start with 2022 as in your original data
   let bulgeFilters = {};
@@ -543,30 +646,16 @@ function createNormalizedFilters(data, config) {
       infoYear.textContent = year;
     }
 
-    // Update year display text
-    document.getElementById("currentyeartext").textContent = year;
+    // Update year display text and position
+    updateYearDisplayPosition(year);
   }
 
-  // Get button elements
-  const playBtn = document.getElementById("play-btn");
-  const pauseBtn = document.getElementById("pause-btn");
-  const timelineSlider = document.getElementById("timeline");
-  const currentYearText = document.getElementById("currentyeartext");
-
-  // Years array
-  const years = [
-    2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
-    2022, 2023, 2024, 2025,
-  ];
-
-  // Set up slider
-  timelineSlider.max = years.length - 1;
-  timelineSlider.value = years.indexOf(currentYear);
-
-  // Update year display and position
-  function updateYearDisplay(year) {
+  // Function to update year display position on slider
+  function updateYearDisplayPosition(year) {
     const yearDisplay = document.getElementById("currentyeartext");
     const slider = document.getElementById("timeline");
+
+    if (!yearDisplay || !slider) return;
 
     yearDisplay.textContent = year;
 
@@ -583,7 +672,20 @@ function createNormalizedFilters(data, config) {
     yearDisplay.style.left = position + "px";
   }
 
-  // Updated auto-play functionality
+  // Get UI elements
+  const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const timelineSlider = document.getElementById("timeline");
+  const years = [
+    2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+    2022, 2023, 2024, 2025,
+  ];
+
+  // Set up slider
+  timelineSlider.max = years.length - 1;
+  timelineSlider.value = years.indexOf(currentYear);
+
+  // Auto-play functionality
   let autoPlayInterval = null;
   let isPlaying = false;
 
@@ -600,7 +702,7 @@ function createNormalizedFilters(data, config) {
       yearIndex = (yearIndex + 1) % years.length;
       updateFiltersForYear(years[yearIndex]);
       timelineSlider.value = yearIndex;
-      updateYearDisplay(currentYear);
+      updateYearDisplayPosition(currentYear);
     }, 1000);
   }
 
@@ -618,23 +720,27 @@ function createNormalizedFilters(data, config) {
   }
 
   // Button event listeners
-  playBtn.addEventListener("click", startAutoPlay);
-  pauseBtn.addEventListener("click", stopAutoPlay);
+  if (playBtn && pauseBtn) {
+    playBtn.addEventListener("click", startAutoPlay);
+    pauseBtn.addEventListener("click", stopAutoPlay);
+  }
 
   // Slider event listener
-  timelineSlider.addEventListener("input", (e) => {
-    const yearIndex = parseInt(e.target.value);
-    const selectedYear = years[yearIndex];
-    updateFiltersForYear(selectedYear);
-    updateYearDisplay(currentYear);
+  if (timelineSlider) {
+    timelineSlider.addEventListener("input", (e) => {
+      const yearIndex = parseInt(e.target.value);
+      const selectedYear = years[yearIndex];
+      updateFiltersForYear(selectedYear);
+      updateYearDisplayPosition(currentYear);
 
-    // Stop auto-play when user manually changes slider
-    if (isPlaying) {
-      stopAutoPlay();
-    }
-  });
+      // Stop auto-play when user manually changes slider
+      if (isPlaying) {
+        stopAutoPlay();
+      }
+    });
+  }
 
-  // Update the existing keyboard controls to work with new play/pause buttons
+  // Update keyboard controls to work with new system
   window.addEventListener("keydown", (event) => {
     const currentIndex = years.indexOf(currentYear);
 
@@ -644,7 +750,7 @@ function createNormalizedFilters(data, config) {
         if (currentIndex > 0) {
           updateFiltersForYear(years[currentIndex - 1]);
           timelineSlider.value = currentIndex - 1;
-          updateYearDisplay(currentYear);
+          updateYearDisplayPosition(currentYear);
           if (isPlaying) stopAutoPlay();
         }
         break;
@@ -653,7 +759,7 @@ function createNormalizedFilters(data, config) {
         if (currentIndex < years.length - 1) {
           updateFiltersForYear(years[currentIndex + 1]);
           timelineSlider.value = currentIndex + 1;
-          updateYearDisplay(currentYear);
+          updateYearDisplayPosition(currentYear);
           if (isPlaying) stopAutoPlay();
         }
         break;
