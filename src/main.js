@@ -734,6 +734,7 @@ function createNormalizedFilters(data, config) {
 
   // Initialize with starting year
   updateFiltersForYear(currentYear);
+  updateYearDisplay(currentYear);
 
   // Static filters - no animation for now
   // Animation will be added later for year-by-year data transitions
