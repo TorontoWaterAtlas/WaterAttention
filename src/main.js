@@ -2,362 +2,7 @@ import { Application, Assets, Sprite } from "pixi.js";
 import { BulgePinchFilter } from "pixi-filters";
 import { Container } from "pixi.js";
 
-// Water bodies data with year-wise Google Trends values (2010-2025)
-const waterBodiesData = [
-  {
-    name: "donRiver",
-    center: { x: 0.655, y: 0.5302 },
-    yearlyData: {
-      2010: 1,
-      2011: 1,
-      2012: 8,
-      2013: 10,
-      2014: 13,
-      2015: 12,
-      2016: 10,
-      2017: 12,
-      2018: 9,
-      2019: 6,
-      2020: 5,
-      2021: 10,
-      2022: 3,
-      2023: 7,
-      2024: 8,
-      2025: 9,
-    },
-  },
-  {
-    name: "humberRiver",
-    center: { x: 0.135, y: 0.613 },
-    yearlyData: {
-      2010: 31,
-      2011: 27,
-      2012: 35,
-      2013: 35,
-      2014: 35,
-      2015: 35,
-      2016: 38,
-      2017: 35,
-      2018: 36,
-      2019: 54,
-      2020: 59,
-      2021: 56,
-      2022: 81,
-      2023: 59,
-      2024: 51,
-      2025: 54,
-    },
-  },
-  {
-    name: "blackCreek",
-    center: { x: 0.1885, y: 0.4472 },
-    yearlyData: {
-      2010: 57,
-      2011: 65,
-      2012: 55,
-      2013: 52,
-      2014: 53,
-      2015: 51,
-      2016: 52,
-      2017: 55,
-      2018: 40,
-      2019: 36,
-      2020: 33,
-      2021: 16,
-      2022: 34,
-      2023: 40,
-      2024: 36,
-      2025: 41,
-    },
-  },
-  {
-    name: "keatingChannel",
-    center: { x: 0.712, y: 0.7051 },
-    yearlyData: {
-      2010: 0,
-      2011: 1,
-      2012: 0,
-      2013: 0,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 0,
-      2019: 0,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  {
-    name: "mimicoCreek",
-    center: { x: 0.144, y: 0.8316 },
-    yearlyData: {
-      2010: 1,
-      2011: 1,
-      2012: 1,
-      2013: 1,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 1,
-      2019: 1,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  {
-    name: "mudCreek",
-    center: { x: 0.61595, y: 0.3503 },
-    yearlyData: {
-      2010: 1,
-      2011: 1,
-      2012: 1,
-      2013: 1,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 1,
-      2019: 1,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  {
-    name: "taylorMasseyCreek",
-    center: { x: 0.812, y: 0.2445 },
-    yearlyData: {
-      2010: 0,
-      2011: 1,
-      2012: 1,
-      2013: 1,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 1,
-      2019: 1,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  {
-    name: "yellowCreek",
-    center: { x: 0.5509, y: 0.365 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 1,
-      2013: 1,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 1,
-      2019: 1,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  {
-    name: "nordheimerRavine",
-    center: { x: 0.464, y: 0.392 },
-    yearlyData: {
-      2010: 0,
-      2011: 1,
-      2012: 1,
-      2013: 1,
-      2014: 1,
-      2015: 1,
-      2016: 1,
-      2017: 1,
-      2018: 1,
-      2019: 1,
-      2020: 1,
-      2021: 1,
-      2022: 1,
-      2023: 1,
-      2024: 1,
-      2025: 1,
-    },
-  },
-  // Water bodies with consistently zero values
-  {
-    name: "cudmoreCreek",
-    center: { x: 0.628, y: 0.3237 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "smallsCreek",
-    center: { x: 0.8005, y: 0.4253 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "donRiverWestBranch",
-    center: { x: 0.604, y: 0.0193 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "burkeBrook",
-    center: { x: 0.6055, y: 0.0762 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "wilsonBrook",
-    center: { x: 0.8375, y: 0.0163 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "curityCreek",
-    center: { x: 0.7975, y: 0.217 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-  {
-    name: "ferrisCreek",
-    center: { x: 0.8268, y: 0.2244 },
-    yearlyData: {
-      2010: 0,
-      2011: 0,
-      2012: 0,
-      2013: 0,
-      2014: 0,
-      2015: 0,
-      2016: 0,
-      2017: 0,
-      2018: 0,
-      2019: 0,
-      2020: 0,
-      2021: 0,
-      2022: 0,
-      2023: 0,
-      2024: 0,
-      2025: 0,
-    },
-  },
-];
+import { waterBodiesData } from "../data/water_body_attention_year.js";
 
 // Normalization configuration
 const config = {
@@ -373,11 +18,16 @@ const config = {
   },
 };
 
+let dataSourceType = "";
+
 // Function to calculate total references for a given year
 function getTotalReferencesForYear(year) {
   let total = 0;
   waterBodiesData.forEach((waterBody) => {
-    total += waterBody.yearlyData[year] || 0;
+    total +=
+      dataSourceType === "journal"
+        ? waterBody.yearlyDataJournal[year]
+        : waterBody.yearlyData[year];
   });
   return total;
 }
@@ -440,7 +90,10 @@ function getDataForYear(waterBodiesData, year) {
   return waterBodiesData.map((item) => ({
     name: item.name,
     center: item.center,
-    googleTrends: item.yearlyData[year] || 0,
+    googleTrends:
+      dataSourceType === "journal"
+        ? item.yearlyDataJournal[year]
+        : item.yearlyData[year],
   }));
 }
 
@@ -567,7 +220,10 @@ function createNormalizedFilters(data, config) {
     }
 
     if (closestBody && minDistance < 0.08) {
-      const value = closestBody.yearlyData[currentYear] ?? 0;
+      const value =
+        dataSourceType === "journal"
+          ? closestBody.yearlyDataJournal[currentYear]
+          : closestBody.yearlyData[currentYear];
       const name = formatWaterBodyName(closestBody.name);
       const effectDescription = getEffectDescription(value);
 
