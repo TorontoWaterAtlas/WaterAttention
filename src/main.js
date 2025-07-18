@@ -440,7 +440,7 @@ const config = {
 // Function to calculate total references for a given year
 function getTotalReferencesForYear(year) {
   let total = 0;
-  waterBodiesData.forEach(waterBody => {
+  waterBodiesData.forEach((waterBody) => {
     total += waterBody.yearlyData[year] || 0;
   });
   return total;
@@ -538,8 +538,6 @@ function createNormalizedFilters(data, config) {
       strength: normalizedStrength,
     });
 
-
-
     const effectType = normalizedStrength < 0 ? "PINCH" : "BULGE";
     console.log(
       `${item.name}: trends=${item.googleTrends}, radius=${normalizedRadius.toFixed(1)}, strength=${normalizedStrength.toFixed(2)} (${effectType})`,
@@ -548,8 +546,6 @@ function createNormalizedFilters(data, config) {
 
   return filters;
 }
-
-
 
 (async () => {
   // Create a new application
@@ -603,8 +599,8 @@ function createNormalizedFilters(data, config) {
 
     // Update the info box with total references
     const totalReferences = getTotalReferencesForYear(year);
-    const infoNumber = document.querySelector('.info-number');
-    const infoYear = document.querySelector('.info-year');
+    const infoNumber = document.querySelector(".info-number");
+    const infoYear = document.querySelector(".info-year");
 
     if (infoNumber && infoYear) {
       infoNumber.textContent = totalReferences;
@@ -616,22 +612,25 @@ function createNormalizedFilters(data, config) {
   }
 
   // Get button elements
-  const playBtn = document.getElementById('play-btn');
-  const pauseBtn = document.getElementById('pause-btn');
-  const timelineSlider = document.getElementById('timeline');
-  const currentYearText = document.getElementById('currentyeartext');
+  const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const timelineSlider = document.getElementById("timeline");
+  const currentYearText = document.getElementById("currentyeartext");
 
-// Years array
-  const years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+  // Years array
+  const years = [
+    2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+    2022, 2023, 2024, 2025,
+  ];
 
-// Set up slider
+  // Set up slider
   timelineSlider.max = years.length - 1;
   timelineSlider.value = years.indexOf(currentYear);
 
-// Update year display and position
+  // Update year display and position
   function updateYearDisplay(year) {
-    const yearDisplay = document.getElementById('currentyeartext');
-    const slider = document.getElementById('timeline');
+    const yearDisplay = document.getElementById("currentyeartext");
+    const slider = document.getElementById("timeline");
 
     yearDisplay.textContent = year;
 
@@ -645,10 +644,10 @@ function createNormalizedFilters(data, config) {
     const position = percentage * sliderWidth;
 
     // Update year display position
-    yearDisplay.style.left = position + 'px';
+    yearDisplay.style.left = position + "px";
   }
 
-// Updated auto-play functionality
+  // Updated auto-play functionality
   let autoPlayInterval = null;
   let isPlaying = false;
 
@@ -656,8 +655,8 @@ function createNormalizedFilters(data, config) {
     if (isPlaying) return;
 
     isPlaying = true;
-    playBtn.style.display = 'none';
-    pauseBtn.style.display = 'flex';
+    playBtn.style.display = "none";
+    pauseBtn.style.display = "flex";
 
     let yearIndex = years.indexOf(currentYear);
 
@@ -673,8 +672,8 @@ function createNormalizedFilters(data, config) {
     if (!isPlaying) return;
 
     isPlaying = false;
-    playBtn.style.display = 'flex';
-    pauseBtn.style.display = 'none';
+    playBtn.style.display = "flex";
+    pauseBtn.style.display = "none";
 
     if (autoPlayInterval) {
       clearInterval(autoPlayInterval);
@@ -682,12 +681,12 @@ function createNormalizedFilters(data, config) {
     }
   }
 
-// Button event listeners
-  playBtn.addEventListener('click', startAutoPlay);
-  pauseBtn.addEventListener('click', stopAutoPlay);
+  // Button event listeners
+  playBtn.addEventListener("click", startAutoPlay);
+  pauseBtn.addEventListener("click", stopAutoPlay);
 
-// Slider event listener
-  timelineSlider.addEventListener('input', (e) => {
+  // Slider event listener
+  timelineSlider.addEventListener("input", (e) => {
     const yearIndex = parseInt(e.target.value);
     const selectedYear = years[yearIndex];
     updateFiltersForYear(selectedYear);
@@ -699,7 +698,7 @@ function createNormalizedFilters(data, config) {
     }
   });
 
-// Update the existing keyboard controls to work with new play/pause buttons
+  // Update the existing keyboard controls to work with new play/pause buttons
   window.addEventListener("keydown", (event) => {
     const currentIndex = years.indexOf(currentYear);
 
@@ -732,7 +731,6 @@ function createNormalizedFilters(data, config) {
         break;
     }
   });
-
 
   // Initialize with starting year
   updateFiltersForYear(currentYear);
@@ -769,7 +767,6 @@ function createNormalizedFilters(data, config) {
   //       break;
   //   }
   // });
-
 
   // Auto-play functionality
   // let autoPlayInterval = null;
