@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivers Visualization</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+    #description {
+	position: absolute;
+	padding: 10px 20px;
+	background: white;
+	color: black;
+	top: 2vh;
+	left: 3vw;
+	border: 1px solid;
+	max-width: 40vw;
+	max-height: 18vh;
+	font-size: 0.7em;
+	overflow: hidden;
+    }
+
+    #control {
+	position: absolute;
+	bottom: 0;
+	background: white;
+	width: 100%;
+	min-height: 75px;
+	color: black;
+    }
+
+    .slidecontainer {
+	width: 80%; /* Width of the outside container */
+    }
+
+    .slider {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 15px;
+	border-radius: 5px;  
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%; 
+	background: #04AA6D;
+	cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: #04AA6D;
+	cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+  <div id="description">Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present. The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear". This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention, leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map — use the slider or play/pause to explore over time, or hover to learn more.</div>
+  
+  <div id="map" style="height: 98vh;"></div>
+  <script type="module" src="/src/main2.js"></script>
+</body>
+</html>
