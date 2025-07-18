@@ -5,7 +5,7 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/style.css">
-    <title>PixiJS - Template</title>
+    <title>Which Waters Matter? Media Attention to Toronto's Waterways (2010-2025)</title>
     <style>
         #description {
             position: absolute;
@@ -68,8 +68,8 @@
             border: 2px solid #99d4f2;
             border-radius: 15px;
             padding: 15px;
-            width: 200px;
-            max-height: 200px;
+            width: 15vw;
+            max-height: 20vh;
             font-family: Arial, sans-serif;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
@@ -79,11 +79,11 @@
             font-size: 0.9em;
             color: #434343;
             line-height: 1.4;
+            text-align: justify;
         }
 
         .data-sources-content a {
             color: #434343;
-            text-decoration: none;
         }
 
         .data-sources-content a:hover {
@@ -108,7 +108,7 @@
         .control-left {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .built-for {
@@ -233,7 +233,7 @@
         .control-right {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
         }
 
         .powered-by {
@@ -257,22 +257,31 @@
         #hover-box {
             position: absolute;
             display: none;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             padding: 8px 12px;
             border-radius: 6px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             font-family: sans-serif;
-            font-size: 14px;
             pointer-events: none;
-            z-index: 999;
+            z-index: 9999;
             border: 1px solid #99d4f2;
-            max-width: 250px;
+            max-width: 280px;
+            min-width: 200px;
         }
     </style>
 </head>
 
 <body>
-<div id="description">Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present. The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear". This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention, leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map — use the slider or play/pause to explore over time, or hover to learn more.</div>
+<div id="description" style="text-align: justify;">
+    <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">
+        Which Waters Matter? Media Attention to Toronto's Waterways (2010-2025)
+    </div>
+    Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present.
+    The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear".
+    This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention,
+    leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map —
+    watch the change in distortion across the map over the last 15 years, use the slider or play/pause to explore over time, or hover to learn more.
+</div>
 
 <div id="info-box">
     <div class="info-number">119</div>
@@ -281,6 +290,7 @@
 </div>
 
 <div id="data-sources-box">
+    <div class="data-sources-content" style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">Data Sources:</div>
     <div class="data-sources-content">
         Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
     </div>
@@ -288,13 +298,28 @@
 
 <div id="app">
     <div id="pixi-container"></div>
-    <div id="hover-box"></div>
+    <div id="hover-box" style="
+        position: absolute;
+        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 8px 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        font-family: sans-serif;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 9999;
+        border: 1px solid #99d4f2;
+        max-width: 250px;
+    "></div>
 </div>
 
 <div id="control">
     <div class="control-left">
-        <div class="built-for">Built for</div>
-        <div class="organization">Toronto Water Atlas</div>
+        <div class="built-for">Map created as part of</div>
+        <div class="pixi-link">
+            <a href="https://torontowateratlas.github.io/" target="_blank"> The Toronto Water Atlas </a>
+        </div>
     </div>
 
     <div class="control-center">
@@ -316,14 +341,15 @@
             </div>
         </div>
         <div class="research-credits">
-            Research and map by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>
+            Research and map created by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>
         </div>
     </div>
 
     <div class="control-right">
         <div class="powered-by">Powered by</div>
         <div class="pixi-link">
-            <a href="https://pixijs.com" target="_blank">PixiJS</a>
+            <a href="https://pixijs.com" target="_blank">PixiJS</a> and
+            <a href="https://www.flaticon.com/free-icons/contaminated-water" title="contaminated water icons">Flaticon</a>
         </div>
     </div>
 </div>
