@@ -1,4 +1,4 @@
-// Water bodies data with year-wise Google Trends values (2010-2025)
+// Water bodies data with year-wise Google Trends + Toronto Star values (2010-2025)
 export const waterBodiesData = [
   {
     name: "donRiver",
@@ -119,6 +119,22 @@ export const waterBodiesData = [
       2024: 39,
       2025: 13,
     },
+    newsData: {
+      2019: {
+        headline: "Humber Bay Shores is growing up nicely",
+        description: "The Mimico skyline appears like an ever-changing Oz on the horizon.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/opinion/contributors/humber-bay-shores-is-growing-up-nicely/article_75f3cfcd-d5d3-579d-b50e-fd736986c1c6.html"
+      },
+      2021: {
+        headline: "Cyberattack brings down Humber River Hospital computers",
+        description: "Network shutdown has led to long waits in ER, diagnostic testing.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/news/gta/cyberattack-leads-to-computer-system-failure-at-humber-river-hospital-impacting-patient-care/article_7f17d16c-ef38-5ccf-a36b-9b74941c0d1d.html"
+      }
+    }
   },
   {
     name: "blackCreek",
@@ -159,6 +175,14 @@ export const waterBodiesData = [
       2024: 31,
       2025: 6,
     },
+    newsData: {
+      2011: {
+        headline: "Just hops, skip and a jump away: Black Creek Brewery grows own ingredients for pioneer suds",
+        description: "If you wanted to find out what beer tasted like in the 19th century, this is as close as you're going to get, said Black Creek brewmaster Ed Koren, who expects their One-Mile Beer to be ready by Thursday.",
+        author: "Josh Rubin",
+        source: "Toronto Star"
+      }
+    }
   },
   {
     name: "keatingChannel",
@@ -199,6 +223,14 @@ export const waterBodiesData = [
       2024: 19,
       2025: 1,
     },
+    newsData: {
+      2024: {
+        headline: "Rebirth of the Don River: Inside the marvel of engineering that will transform the Port Lands",
+        description: "One of the world's biggest civil engineering projects reached a long-anticipated, critical milestone on Friday when the Don River was finally reunited with Lake Ontario through Toronto's inner harbour. It really is a rebirth, said Mayor Olivia Chow.",
+        author: "Toronto Star",
+        source: "Toronto Star"
+      }
+    }
   },
   {
     name: "mimicoCreek",
@@ -239,6 +271,21 @@ export const waterBodiesData = [
       2024: 3,
       2025: 1,
     },
+    newsData: {
+      2015: {
+        headline: "Etobicoke oil spill a warning: Ducks in Mimico Creek get a helping hand",
+        description: "Any oil spill into any creek is of great concern to all wildlife and nature. The oil from old transformers may contain dioxins and polymeric silicone fluids. Both are hazardous. This particular spill was in the Mimico Creek watershed but not directly into the creek.",
+        author: "Toronto Star",
+        source: "Toronto Star"
+      },
+      2021: {
+        headline: "Etobicoke wildlife at peril after chemical runoff from fire: 'This is probably the most terrifying thing that's ever happened to them'",
+        description: "A number of chemicals seeped into Mimico Creek and Humber River from the industrial site ravaged by a blaze Friday, prompting response from the Toronto Wildlife Centre.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/news/gta/etobicoke-wildlife-at-peril-after-chemical-runoff-from-fire-this-is-probably-the-most-terrifying/article_b1a41c5d-c2f0-5b2a-8df4-add2ec522c3e.html"
+      }
+    }
   },
   {
     name: "mudCreek",
@@ -279,6 +326,14 @@ export const waterBodiesData = [
       2024: 0,
       2025: 0,
     },
+    newsData: {
+      2010: {
+        headline: "Ecotourists just love Brick Works",
+        description: "Heritage site praised by National Geographic for reconnecting the city with the natural world.",
+        author: "Katie Daubs",
+        source: "Toronto Star"
+      }
+    }
   },
   {
     name: "taylorMasseyCreek",
@@ -399,6 +454,14 @@ export const waterBodiesData = [
       2024: 0,
       2025: 0,
     },
+    newsData: {
+      2013: {
+        headline: "Finding the GTA's 'whoosh' spots: Explore some of the most dramatic places to see and feel the city's speed and movement",
+        description: "Explore some of the most dramatic places to see and feel the city's speed and movement in Toronto.",
+        author: "Shawn Micallef",
+        source: "Toronto Star"
+      }
+    }
   },
   // Water bodies with consistently zero values
   {
@@ -440,6 +503,15 @@ export const waterBodiesData = [
       2024: 0,
       2025: 0,
     },
+    newsData: {
+      2022: {
+        headline: "'It just does seem a bit Grinch-like to me': Donated toys are a big hit with the kids on Toronto playgrounds, but city staff throws them away",
+        description: "Donated toys were a big hit with kids and parents at this Toronto playground, but then city staff threw them away.",
+        author: "Toronto Star",
+        source: "Toronto Star",
+        url: "https://www.thestar.com/news/gta/donated-toys-were-a-big-hit-with-kids-and-parents-at-this-toronto-playground-then/article_1466830f-656b-55b0-8463-41be2805e69a.html"
+      }
+    }
   },
   {
     name: "smallsCreek",
