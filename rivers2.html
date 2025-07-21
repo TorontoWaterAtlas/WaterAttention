@@ -30,15 +30,125 @@
     .info-text { font-size: 1.2em; color: #99d4f2; line-height: 1.2; }
     .info-year { font-size: 1.5em; font-weight: bold; color: #e892a2; }
     #data-sources-box {
-      right: 2vw; bottom: 25vh; background: #f0f0f2; border: 2px solid #99d4f2;
-      border-radius: 15px; padding: 15px; width: 15vw; max-height: 20vh;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow-y: auto;
+      position: absolute;
+      right: 2vw;
+      bottom: 20vh;
+      background: #f0f0f2;
+      border: 2px solid #99d4f2;
+      border-radius: 15px;
+      padding: 15px;
+      width: 14em;
+      max-height: 16em;
+      font-family: Arial, sans-serif;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
     }
+
+    .data-sources-content {
+      font-size: 0.9em;
+      color: #434343;
+      line-height: 1.4;
+      text-align: justify;
+    }
+
+    .data-sources-content a {
+      color: #434343;
+    }
+
+    .data-sources-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toggle switch styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switchslider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .3s;
+      transition: .3s;
+      border-radius: 20px;
+    }
+
+    .switchslider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .3s;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    input:checked + .switchslider {
+      background-color: #e892a2;
+    }
+
+    input:focus + .switchslider {
+      box-shadow: 0 0 4px #e892a2;
+    }
+
+    input:checked + .switchslider:before {
+      -webkit-transform: translateX(20px);
+      -ms-transform: translateX(20px);
+      transform: translateX(20px);
+    }
+
+    .switchslider.round {
+      border-radius: 20px;
+    }
+
+    .switchslider.round:before {
+      border-radius: 50%;
+    }
+
+    .data-source-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      font-size: 0.85em;
+      color: #434343;
+    }
+
     #hover-box {
-      position: absolute; display: none; background: white; padding: 8px 12px;
-      border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      font-family: sans-serif; font-size: 14px; pointer-events: none; z-index: 9999;
-      border: 1px solid #99d4f2; max-width: 250px;
+      position: absolute;
+      display: none;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      font-family: sans-serif;
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 9999;
+      border: 1px solid #99d4f2;
+      max-width: 350px; /* Increased for news content */
+      min-width: 200px;
+      max-height: 200px; /* Added max height */
+      overflow-y: auto; /* Allow scrolling if content is too long */
     }
     #control {
       bottom: 0; width: 100%; height: 120px; background: #f7f7f6;
@@ -100,9 +210,24 @@
   </div>
 
   <div id="data-sources-box">
-    <div><strong>Data Sources:</strong></div>
-    <div>
-      Data sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> via <a href="https://www.proquest.com" target="_blank">ProQuest</a>.
+    <div class="data-sources-content" style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">
+      Data Sources:
+    </div>
+    <div class="data-sources-content">
+      Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
+    </div>
+
+    <div style="font-weight: bold; margin: 15px 0 8px 0; font-size: 1em; text-align: center; color: #434343;">
+      Choose Data Source:
+    </div>
+
+    <div class="data-source-toggle">
+      <span style="font-size: 0.9em; color: #434343;">Google Trends</span>
+      <label class="switch">
+        <input id="datasource-toggle" type="checkbox">
+        <span class="switchslider round"></span>
+      </label>
+      <span style="font-size: 0.9em; color: #434343;">Toronto Star</span>
     </div>
   </div>
 
