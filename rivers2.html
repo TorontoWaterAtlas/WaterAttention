@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which Waters Matter? Media Attention to Toronto's Waterways</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="/js/leaflet.timeline.js"></script>
+  <style>
+    /* Include all styles from style.css and UI blocks here */
+    body { margin: 0; font-family: Arial, sans-serif; }
+    #map { height: 100vh; z-index: 0; }
+    #description, #info-box, #data-sources-box, #hover-box, #control {
+      position: absolute;
+      z-index: 1000;
+    }
+    #description {
+      top: 2vh; left: 3vw; padding: 10px 20px; background: #f7f7f6;
+      color: #434343; border: 1px solid #99d4f2; border-radius: 15px;
+      max-width: 50vw; font-size: 1em; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #info-box {
+      top: 2vh; right: 3vw; background: #f0f0f2; border: 2px solid #99d4f2;
+      border-radius: 15px; padding: 10px 20px; width: 120px; height: 120px;
+      display: flex; flex-direction: column; justify-content: center;
+      text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .info-number { font-size: 1.5em; font-weight: bold; color: #e892a2; }
+    .info-text { font-size: 1.2em; color: #99d4f2; line-height: 1.2; }
+    .info-year { font-size: 1.5em; font-weight: bold; color: #e892a2; }
+    #data-sources-box {
+      right: 2vw; bottom: 25vh; background: #f0f0f2; border: 2px solid #99d4f2;
+      border-radius: 15px; padding: 15px; width: 15vw; max-height: 20vh;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow-y: auto;
+    }
+    #hover-box {
+      position: absolute; display: none; background: white; padding: 8px 12px;
+      border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      font-family: sans-serif; font-size: 14px; pointer-events: none; z-index: 9999;
+      border: 1px solid #99d4f2; max-width: 250px;
+    }
+    #control {
+      bottom: 0; width: 100%; height: 120px; background: #f7f7f6;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center the group */
+      padding: 0 40px; border-top: 1px solid #99d4f2;
+    }
+    .play-btn, .pause-btn {
+      background: #e892a2; border: none; border-radius: 50%; width: 40px;
+      height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white; transition: background-color 0.2s;
+    }
+    .play-btn:hover, .pause-btn:hover { background: #d67a94; }
+    .slidecontainer {
+      position: relative;
+      width: 50vw; /* or 100%, or whatever width you want for the slider */
+      min-width: 300px;
+    }
+    .year-display {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #e892a2;
+      pointer-events: none;
+      /* The left position will be updated dynamically in JS to follow the slider thumb */
+    }
+    .slider {
+      -webkit-appearance: none; width: 100%; height: 8px; border-radius: 5px;
+      background: #d3d3d3; outline: none; opacity: 0.7; transition: opacity .2s;
+    }
+    .slider:hover { opacity: 1; }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 20px; height: 20px;
+      border-radius: 50%; background: #e892a2; cursor: pointer;
+    }
+    .slider::-moz-range-thumb {
+      width: 20px; height: 20px; border-radius: 50%; background: #e892a2; cursor: pointer; border: none;
+    }
+    .play-controls {
+      display: flex;
+      align-items: center;
+      gap: 32px; /* Adjust gap as needed */
+    }
+  </style>
+</head>
+<body>
+  <div id="description">
+    <strong>Which Waters Matter? Media Attention to Toronto's Waterways (2010–2025)</strong><br>
+    Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years. The more a water body is mentioned, the larger it appears.
+  </div>
+
+  <div id="info-box">
+    <div class="info-number" id="total-count">0</div>
+    <div class="info-text">References to waterways in</div>
+    <div class="info-year" id="year-label">2010</div>
+  </div>
+
+  <div id="data-sources-box">
+    <div><strong>Data Sources:</strong></div>
+    <div>
+      Data sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> via <a href="https://www.proquest.com" target="_blank">ProQuest</a>.
+    </div>
+  </div>
+
+  <div id="hover-box"></div>
+
+  <div id="map"></div>
+
+  <div id="control">
+    <div class="play-controls">
+      <button class="play-btn" id="play-btn">▶</button>
+      <button class="pause-btn" id="pause-btn" style="display: none;">⏸</button>
+      <div class="slidecontainer">
+        <div class="year-display" id="currentyeartext">2010</div>
+        <input type="range" min="0" max="15" value="0" class="slider" id="timeline">
+      </div>
+    </div>
+  </div>
+
+  <script src="rivers-ui.js"></script> <!-- put your updated script here -->
+</body>
+</html>
