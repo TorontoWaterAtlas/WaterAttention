@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Which Waters Matter? Media Attention to Toronto's Waterways</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
@@ -14,6 +16,7 @@
     #description, #info-box, #data-sources-box, #hover-box, #control {
       position: absolute;
       z-index: 1000;
+      text-align: justify;
     }
     #description {
       top: 2vh; left: 3vw; padding: 10px 20px; background: #f7f7f6;
@@ -272,8 +275,14 @@
 </head>
 <body>
   <div id="description">
-    <strong>Which Waters Matter? Media Attention to Toronto's Waterways (2010–2025)</strong><br>
-    Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years. The more a water body is mentioned, the larger it appears.
+    <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">
+      Which Waters Matter? Media Attention to Toronto's Waterways (2010–2025)
+    </div>
+    Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present.
+    The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear".
+    This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention,
+    leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map —
+    watch the change in distortion across the map over the last 15 years, use the slider or play/pause to explore over time, or hover to learn more.
   </div>
 
   <div id="info-box">
@@ -327,7 +336,7 @@
 	</div>
       </div>
       <div class="research-credits">
-	Research and map created by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>
+	Research and map created by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>, and Prashant Baisla
       </div>
 
     </div>

@@ -4,7 +4,7 @@ const geojsonFiles = [
     {
         "filename": "black_creek.geojson",
         "name": "blackCreek",
-        "color": "blue",
+        "color": "#1d75a2",
         "yearlyData": {
             "2010": 57, "2011": 65, "2012": 55, "2013": 52, "2014": 53, "2015": 51,
             "2016": 52, "2017": 55, "2018": 40, "2019": 36, "2020": 33, "2021": 16,
@@ -27,7 +27,7 @@ const geojsonFiles = [
     {
         "filename": "curity_creek.geojson",
         "name": "curityCreek",
-        "color": "blue",
+        "color": "#1d55a2",
         "yearlyData": {
             "2010": 0, "2011": 0, "2012": 0, "2013": 0, "2014": 0, "2015": 0,
             "2016": 0, "2017": 0, "2018": 0, "2019": 0, "2020": 0, "2021": 0,
@@ -73,7 +73,7 @@ const geojsonFiles = [
     {
         "filename": "smalls_creek.geojson",
         "name": "smallsCreek",
-        "color": "blue",
+        "color": "#1d55a2",
         "yearlyData": {
             "2010": 0, "2011": 0, "2012": 0, "2013": 0, "2014": 0, "2015": 0,
             "2016": 0, "2017": 0, "2018": 0, "2019": 0, "2020": 0, "2021": 0,
@@ -103,7 +103,7 @@ const geojsonFiles = [
     {
         "filename": "don_river.geojson",
         "name": "donRiver",
-        "color": "blue",
+        "color": "#1d75a2",
         "yearlyData": {
             "2010": 1, "2011": 1, "2012": 8, "2013": 10, "2014": 13, "2015": 12,
             "2016": 10, "2017": 12, "2018": 9, "2019": 6, "2020": 5, "2021": 10,
@@ -190,7 +190,7 @@ const geojsonFiles = [
     {
         "filename": "castle_frank_brook.geojson",
         "name": "nordheimerRavine",
-        "color": "blue",
+        "color": "#1d55a2",
         "yearlyData": {
             "2010": 0, "2011": 1, "2012": 1, "2013": 1, "2014": 1, "2015": 1,
             "2016": 1, "2017": 1, "2018": 1, "2019": 1, "2020": 1, "2021": 1,
@@ -243,7 +243,7 @@ const geojsonFiles = [
     {
         "filename": "wilson_brook.geojson",
         "name": "wilsonBrook",
-        "color": "blue",
+        "color": "#1d75a2",
         "yearlyData": {
             "2010": 0, "2011": 0, "2012": 0, "2013": 0, "2014": 0, "2015": 0,
             "2016": 0, "2017": 0, "2018": 0, "2019": 0, "2020": 0, "2021": 0,
@@ -282,7 +282,7 @@ const geojsonFiles = [
     {
         "filename": "ferris_creek.geojson",
         "name": "ferrisCreek",
-        "color": "blue",
+        "color": "#1d55a2",
         "yearlyData": {
             "2010": 0, "2011": 0, "2012": 0, "2013": 0, "2014": 0, "2015": 0,
             "2016": 0, "2017": 0, "2018": 0, "2019": 0, "2020": 0, "2021": 0,
@@ -320,7 +320,7 @@ const geojsonFiles = [
     {
         "filename": "yellow_creek.geojson",
         "name": "yellowCreek",
-        "color": "blue",
+        "color": "#1d55a2",
         "yearlyData": {
             "2010": 0, "2011": 0, "2012": 1, "2013": 1, "2014": 1, "2015": 1,
             "2016": 1, "2017": 1, "2018": 1, "2019": 1, "2020": 1, "2021": 1,
