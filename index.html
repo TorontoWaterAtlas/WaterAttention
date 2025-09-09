@@ -5,13 +5,448 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/style.css">
-    <title>PixiJS - Template</title>
+    <title>Which Waters Matter? Media Attention to Toronto's Waterways (2010-2025)</title>
+    <style>
+        #description {
+            position: absolute;
+            padding: 10px 20px;
+            background: #f7f7f6;
+            color: #434343;
+            top: 2vh;
+            left: 3vw;
+            border: 1px solid #99d4f2;
+            border-radius: 15px;
+            max-width: 50vw;
+            max-height: 50vh;
+            font-size: 1em;
+            overflow: hidden;
+	    text-align: justify;
+	    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #info-box {
+            position: absolute;
+            top: 2vh;
+            right: 3vw;
+            background: #f0f0f2;
+            border: 2px solid #99d4f2;
+            border-radius: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            width: 8em;
+            height: 6em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+            margin-bottom: 5px;
+        }
+
+        .info-text {
+            font-size: 1.2em;
+            color: #99d4f2;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .info-year {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+        }
+
+        #data-sources-box {
+            position: absolute;
+            right: 2vw;
+            bottom: 20vh;
+            background: #f0f0f2;
+            border: 2px solid #99d4f2;
+            border-radius: 15px;
+            padding: 15px;
+            width: 14em;
+            max-height: 16em;
+            font-family: Arial, sans-serif;
+	    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .data-sources-content {
+            font-size: 0.9em;
+            color: #434343;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .data-sources-content a {
+            color: #434343;
+        }
+
+        .data-sources-content a:hover {
+            text-decoration: underline;
+        }
+
+        #control {
+            position: absolute;
+            bottom: 0;
+            background: #f7f7f6;
+            width: 100%;
+            height: 120px;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-sizing: border-box;
+            border-top: 1px solid #99d4f2;
+        }
+
+        .control-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .built-for {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .organization {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #434343;
+        }
+
+        .control-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .play-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .play-btn, .pause-btn {
+            background: #e892a2;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover, .pause-btn:hover {
+            background: #d67a94;
+        }
+
+        .slidecontainer {
+            width: 50vw;
+            position: relative;
+        }
+
+        .year-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e892a2;
+            position: absolute;
+            top: -25px;
+            left: 0;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e892a2;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e892a2;
+            cursor: pointer;
+            border: none;
+        }
+
+        .research-credits {
+            font-size: 0.9em;
+            color: #434343;
+            text-align: center;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
+
+        .research-credits a {
+            color: #434343;
+            text-decoration: none;
+        }
+
+        .research-credits a:hover {
+            text-decoration: underline;
+        }
+
+        .control-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .powered-by {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .pixi-link a {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #434343;
+            text-decoration: none;
+        }
+
+        .pixi-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hover box styling */
+        #hover-box {
+            position: absolute;
+            display: none;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: sans-serif;
+            pointer-events: none;
+            z-index: 9999;
+            border: 1px solid #99d4f2;
+            max-width: 350px;
+            min-width: 200px;
+            max-height: 200px; /* Added max height */
+            overflow-y: auto; /* Allow scrolling if content is too long */
+        }
+
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;  /* Reduced from 60px */
+            height: 20px; /* Reduced from 34px */
+            margin: 0 8px; /* Add some spacing around the switch */
+            vertical-align: middle; /* Align with text */
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .switchslider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .3s;
+            transition: .3s;
+            border-radius: 20px; /* More rounded */
+        }
+
+        .switchslider:before {
+            position: absolute;
+            content: "";
+            height: 16px; /* Reduced from 26px */
+            width: 16px;  /* Reduced from 26px */
+            left: 2px;    /* Adjusted positioning */
+            bottom: 2px;  /* Adjusted positioning */
+            background-color: white;
+            -webkit-transition: .3s;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Add subtle shadow */
+        }
+
+        input:checked + .switchslider {
+            background-color: #e892a2;
+        }
+
+        input:focus + .switchslider {
+            box-shadow: 0 0 4px #e892a2;
+        }
+
+        input:checked + .switchslider:before {
+            -webkit-transform: translateX(20px); /* Adjusted from 26px */
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+
+        /* Rounded sliders */
+        .switchslider.round {
+            border-radius: 20px;
+        }
+
+        .switchslider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Improve the data source selection layout */
+        .data-source-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #434343;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="app">
-        <div id="pixi-container"></div>
+<div id="description" style="text-align: justify;">
+    <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">
+        Which Waters Matter? Media Attention to Toronto's Waterways (2010-2025)
     </div>
-    <script type="module" src="/src/main.js"></script>
+    Our map explores the uneven attention given to 15 water bodies — rivers, creeks, brooks, ponds, and water channels — across the Greater Toronto Area over a period of 15 years from 2010 to present.
+    The more a water body is paid attention to in media or search engine queries, the larger it appears; other ones shrink or "disappear".
+    This visual distortion is intended to provoke reflection on the disproportionate attention of different waterways, and how such disparities might shape intervention,
+    leading some to be overlooked in terms of care, policy, and resource allocation. We invite you to interact with the map —
+    watch the change in distortion across the map over the last 15 years, use the slider or play/pause to explore over time, or hover to learn more.
+</div>
+
+<div id="info-box">
+    <div class="info-number">119</div>
+    <div class="info-text">References to waterways in</div>
+    <div class="info-year">2022</div>
+</div>
+
+<div id="data-sources-box">
+    <div class="data-sources-content" style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em; text-align: center;">Data Sources:</div>
+    <div class="data-sources-content">
+        Data for attention to waterways in Toronto shown in this map is sourced from <a href="https://trends.google.com" target="_blank">Google Trends</a> and <a href="https://www.thestar.com" target="_blank">Toronto Star</a> newspaper articles retrieved using <a href="https://www.proquest.com" target="_blank">ProQuest</a>. The data is indicative rather than accurate, as precision was not the goal of this visualization.
+    </div>
+    <div style="font-weight: bold; margin: 15px 0 8px 0; font-size: 1em; text-align: center; color: #434343;">
+        Choose Data Source:
+    </div>
+
+    <div class="data-source-toggle">
+        <span style="font-size: 0.9em; color: #434343;">Google Trends</span>
+        <label class="switch">
+            <input id="datasource-toggle" type="checkbox">
+            <span class="switchslider round"></span>
+        </label>
+        <span style="font-size: 0.9em; color: #434343;">Toronto Star</span>
+    </div>
+</div>
+
+<div id="app">
+    <div id="pixi-container"></div>
+    <div id="hover-box" style="
+        position: absolute;
+        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 8px 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        font-family: sans-serif;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 9999;
+        border: 1px solid #99d4f2;
+        max-width: 250px;
+    "></div>
+</div>
+
+<div id="control">
+    <div class="control-left">
+        <div class="built-for">Map created as part of</div>
+        <div class="pixi-link">
+            <a href="https://torontowateratlas.github.io/" target="_blank"> The Toronto Water Atlas </a>
+        </div>
+    </div>
+
+    <div class="control-center">
+        <div class="play-controls">
+            <button class="play-btn" id="play-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path d="M2 2L10 6L2 10V2Z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="pause-btn" id="pause-btn" style="display: none;">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <rect x="2" y="2" width="3" height="8" fill="currentColor"/>
+                    <rect x="7" y="2" width="3" height="8" fill="currentColor"/>
+                </svg>
+            </button>
+            <div class="slidecontainer">
+                <div class="year-display" id="currentyeartext">2022</div>
+                <input type="range" min="0" max="15" value="12" class="slider" id="timeline">
+            </div>
+        </div>
+        <div class="research-credits">
+            Research and map created by Taneea S Agrawaal, Nils Bonfils, Reyna Wu, affiliated with the <a href="https://www.climateobservatory.ca/" target="_blank">Toronto Climate Observatory</a>
+        </div>
+    </div>
+
+    <div class="control-right">
+        <div class="powered-by">Powered by</div>
+        <div class="pixi-link">
+            <a href="https://pixijs.com" target="_blank">PixiJS</a> and
+            <a href="https://www.flaticon.com/free-icons/contaminated-water" title="contaminated water icons">Flaticon</a>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>

@@ -2,6 +2,162 @@ import { Application, Assets, Sprite } from "pixi.js";
 import { BulgePinchFilter } from "pixi-filters";
 import { Container } from "pixi.js";
 
+import { waterBodiesData } from "../data/water_body_attention_year.js";
+
+// Normalization configuration
+const config = {
+  radius: {
+    min: 50, // Increased minimum radius for visibility
+    max: 200, // Increased maximum radius
+    useLog: true, // Apply logarithmic scaling
+  },
+  strength: {
+    min: -1.0, // Minimum strength (pinch for zero values)
+    max: 1.0, // Reduced maximum strength for better visual balance
+    useLog: true, // Logarithmic scaling for strength
+  },
+};
+
+let dataSourceType = "";
+
+// Function to calculate total references for a given year
+function getTotalReferencesForYear(year) {
+  let total = 0;
+  waterBodiesData.forEach((waterBody) => {
+    total +=
+      dataSourceType === "journal"
+        ? waterBody.yearlyDataJournal[year]
+        : waterBody.yearlyData[year];
+  });
+  return total;
+}
+
+// Function to format water body names for display
+function formatWaterBodyName(name) {
+  // Convert camelCase to readable format
+  return name
+    .replace(/([A-Z])/g, " $1") // Add space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+    .trim();
+}
+
+// Function to get effect description based on value
+function getEffectDescription(value) {
+  if (value === 0) {
+    return "No references (0) - appears pinched on the map";
+  } else if (value >= 1 && value <= 10) {
+    return `Low attention (1-10 references) - slightly enlarged`;
+  } else if (value >= 11 && value <= 40) {
+    return `Moderate attention (11-40 references) - noticeably enlarged`;
+  } else {
+    return `High attention (40+ references) - significantly enlarged`;
+  }
+}
+
+// Normalization functions
+function normalizeValue(
+  value,
+  minVal,
+  maxVal,
+  targetMin,
+  targetMax,
+  useLog = false,
+) {
+  // Handle edge case where all values are the same
+  if (maxVal === minVal) {
+    return (targetMin + targetMax) / 2;
+  }
+
+  let normalizedInput;
+
+  if (useLog) {
+    // Add 1 to avoid log(0), then apply logarithm
+    const logValue = Math.log(value + 1);
+    const logMin = Math.log(minVal + 1);
+    const logMax = Math.log(maxVal + 1);
+    normalizedInput = (logValue - logMin) / (logMax - logMin);
+  } else {
+    // Linear normalization
+    normalizedInput = (value - minVal) / (maxVal - minVal);
+  }
+
+  // Scale to target range: n * (M - m) + m
+  return normalizedInput * (targetMax - targetMin) + targetMin;
+}
+
+// Convert yearly data to the format expected by createNormalizedFilters
+function getDataForYear(waterBodiesData, year) {
+  return waterBodiesData.map((item) => ({
+    name: item.name,
+    center: item.center,
+    googleTrends:
+      dataSourceType === "journal"
+        ? item.yearlyDataJournal[year]
+        : item.yearlyData[year],
+  }));
+}
+
+function createNormalizedFilters(data, config) {
+  // Find min and max Google Trends values for this dataset
+  const googleTrendsValues = data.map((item) => item.googleTrends);
+  const minTrends = Math.min(...googleTrendsValues);
+  const maxTrends = Math.max(...googleTrendsValues);
+
+  console.log(
+    `Google Trends range for current year: ${minTrends} - ${maxTrends}`,
+  );
+
+  const filters = {};
+
+  data.forEach((item) => {
+    const normalizedRadius = normalizeValue(
+      item.googleTrends,
+      minTrends,
+      maxTrends,
+      config.radius.min,
+      config.radius.max,
+      config.radius.useLog,
+    );
+
+    // Special handling for strength: zero values get -1 (pinch)
+    let normalizedStrength;
+    if (item.googleTrends === 0) {
+      normalizedStrength = -1; // Pinch effect for zero values
+    } else {
+      // Normalize non-zero values between 0 and 1 (bulge range)
+      const nonZeroValues = googleTrendsValues.filter((val) => val > 0);
+      if (nonZeroValues.length === 0) {
+        normalizedStrength = 0.4; // Default if all values are zero
+      } else {
+        const minNonZero = Math.min(...nonZeroValues);
+        const maxNonZero = Math.max(...nonZeroValues);
+
+        normalizedStrength = normalizeValue(
+          item.googleTrends,
+          minNonZero,
+          maxNonZero,
+          0.4, // Balanced minimum for visibility without being too strong
+          config.strength.max,
+          config.strength.useLog,
+        );
+      }
+    }
+
+    filters[item.name] = new BulgePinchFilter({
+      center: item.center,
+      radius: normalizedRadius,
+      strength: normalizedStrength,
+    });
+
+    const effectType = normalizedStrength < 0 ? "PINCH" : "BULGE";
+    console.log(
+      `${item.name}: trends=${item.googleTrends}, radius=${normalizedRadius.toFixed(1)}, strength=${normalizedStrength.toFixed(2)} (${effectType})`,
+    );
+  });
+
+  return filters;
+}
+
 (async () => {
   // Create a new application
   const app = new Application();
@@ -16,7 +172,7 @@ import { Container } from "pixi.js";
   // Append the application canvas to the document body
   document.getElementById("pixi-container").appendChild(app.canvas);
 
-  // Load a texture (you can change this URL to any image)
+  // Load a texture
   const imageURL =
     "https://raw.githubusercontent.com/TorontoWaterAtlas/WaterAttention/refs/heads/main/2025-05-05_13-49-19.png";
 
@@ -25,79 +181,433 @@ import { Container } from "pixi.js";
   sprite.anchor.set(0.5);
   sprite.x = app.screen.width / 2;
   sprite.y = app.screen.height / 2;
-  console.log("screen width:", app.screen.width);
-  console.log("sprite width:", sprite.width);
   sprite.width = app.screen.width;
   sprite.height = app.screen.height;
-  //  sprite.scale.set(1);
-  console.log("sprite width:", sprite.width);
+
   const container = new Container();
   container.height = 500;
   app.stage.addChild(container);
   container.addChild(sprite);
 
-  // Apply BulgePinchFilter
-  const donFilterList = [
-    new BulgePinchFilter({
-      center: { x: 0.655, y: 0.555 }, // normalized center
-      radius: 50,
-      strength: 1,
-    }),
-  ];
-  const radius = 200;
-  const humberFilterList = [
-    new BulgePinchFilter({
-      center: { x: 0.15167862756540498, y: 0.6520889489798533 },
-      radius: 50,
-      strength: 1,
-    }),
-    new BulgePinchFilter({
-      center: { x: 0.12496472248213536, y: 0.629818067717745 },
-      radius: 50,
-      strength: 1,
-    }),
-    new BulgePinchFilter({
-      center: { x: 0.13222601128740347, y: 0.5890330108349535 },
-      radius: 50,
-      strength: 1,
-    }),
-    new BulgePinchFilter({
-      center: { x: 0.22135759355291823, y: 0.7953546654503301 }, // normalized center
-      radius: 50,
-      strength: 1,
-    }),
-    new BulgePinchFilter({
-      center: { x: 0.16718015051600177, y: 0.7204515320271495 },
-      radius: 50,
-      strength: 1,
-    }),
-  ];
-  const bpfilter = new BulgePinchFilter();
-  bpfilter.radius = 250;
-  container.filters = [...donFilterList, ...humberFilterList];
-  // app.renderer.on("error", console.error);
-
-  // Animate the bulge effect
-  let tick = 0;
-  app.ticker.add((time) => {
-    tick += time.deltaTime * 0.05;
-    // filter.radius = 50 * Math.sin(tick); // bulge to pinch
-    // filter2.radius = 100 * Math.sin(tick); // bulge to pinch
-
-    // console.log(filter.strength);
-    // (container.filters.map(filter => console.log(filter.strength)));
-  });
-  console.log(app.renderer.type);
-  app.stage.eventMode = "static"; // enables interaction events
+  // Make sure stage is interactive
+  app.stage.eventMode = "static";
+  app.stage.hitArea = app.screen;
   sprite.eventMode = "static";
 
-  app.stage.on("pointerdown", (event) => {
+  app.stage.on("pointermove", (event) => {
     const global = event.global;
     const x = global.x / app.screen.width;
     const y = global.y / app.screen.height;
-    console.log(`click: { x: ${x}, y: ${y}}`);
-    //filter.center = [x, y];
-    // console.log(filter.center);
-    // console.log(filter.strength);
+
+    const hoverBox = document.getElementById("hover-box");
+
+    if (!hoverBox) {
+      console.error("Hover box element not found!");
+      return;
+    }
+
+    let closestBody = null;
+    let minDistance = Infinity;
+
+    for (const body of waterBodiesData) {
+      const dx = body.center.x - x;
+      const dy = body.center.y - y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestBody = body;
+      }
+    }
+
+    if (closestBody && minDistance < 0.08) {
+      const value =
+          dataSourceType === "journal"
+              ? closestBody.yearlyDataJournal[currentYear]
+              : closestBody.yearlyData[currentYear];
+      const name = formatWaterBodyName(closestBody.name);
+      const effectDescription = getEffectDescription(value);
+
+      // Check if there's news data for this water body and year
+      const hasNewsData = closestBody.newsData && closestBody.newsData[currentYear];
+      const newsData = hasNewsData ? closestBody.newsData[currentYear] : null;
+
+      // Create hover box content
+      let hoverContent = `
+      <div style="
+        background: #c5f3c4; 
+        color: #000000; 
+        font-weight: bold; 
+        padding: 4px 8px; 
+        margin: -8px -12px 8px -12px; 
+        border-radius: 6px 6px 0 0;
+        font-size: 14px;
+      ">
+        ${name} in year ${currentYear}:
+      </div>
+      <div style="
+        color: #434343; 
+        font-size: 13px; 
+        line-height: 1.4;
+        margin-bottom: 8px;
+      ">
+        ${effectDescription}
+      </div>
+    `;
+
+      // Add newspaper headline if available
+      if (newsData) {
+        hoverContent += `
+        <div style="
+          border-top: 1px solid #99d4f2;
+          padding-top: 8px;
+          margin-top: 8px;
+        ">
+          <div style="
+            font-weight: bold; 
+            color: #434343; 
+            font-size: 12px;
+            margin-bottom: 4px;
+          ">
+            📰 Featured News:
+          </div>
+          <div style="
+            color: #434343; 
+            font-size: 11px; 
+            line-height: 1.3;
+            font-style: italic;
+          ">
+            "${newsData.headline}"
+          </div>
+          ${newsData.description ? `
+            <div style="
+              color: #666; 
+              font-size: 10px; 
+              margin-top: 4px;
+              line-height: 1.2;
+            ">
+              ${newsData.description.length > 100 ?
+            newsData.description.substring(0, 100) + '...' :
+            newsData.description}
+            </div>
+          ` : ''}
+          <div style="
+            color: #666; 
+            font-size: 10px; 
+            margin-top: 4px;
+          ">
+            — ${newsData.source}${newsData.author && newsData.author !== newsData.source ? `, ${newsData.author}` : ''}
+          </div>
+        </div>
+      `;
+      }
+
+      hoverBox.innerHTML = hoverContent;
+
+      // Position the hover box
+      let leftPos = global.x + 15;
+      let topPos = global.y + 15;
+
+      // Adjust if too close to edges (larger box for news content)
+      const boxWidth = hasNewsData ? 350 : 280;
+      const boxHeight = hasNewsData ? 120 : 80;
+
+      if (leftPos + boxWidth > window.innerWidth) {
+        leftPos = global.x - boxWidth - 15;
+      }
+
+      if (topPos + boxHeight > window.innerHeight) {
+        topPos = global.y - boxHeight - 15;
+      }
+
+      hoverBox.style.left = `${leftPos}px`;
+      hoverBox.style.top = `${topPos}px`;
+      hoverBox.style.display = "block";
+      hoverBox.style.maxWidth = `${boxWidth}px`;
+    } else {
+      hoverBox.style.display = "none";
+    }
   });
+
+  // Year control variables
+  let currentYear = 2022; // Start with 2022 as in your original data
+  let bulgeFilters = {};
+
+  document.getElementById("currentyeartext").textContent = currentYear;
+
+  // Function to update filters for a specific year
+  function updateFiltersForYear(year) {
+    console.log(`\n=== Updating to year ${year} ===`);
+    const yearData = getDataForYear(waterBodiesData, year);
+    bulgeFilters = createNormalizedFilters(yearData, config);
+
+    // Apply filters to container
+    const filterArray = Object.values(bulgeFilters);
+    container.filters = filterArray;
+
+    console.log(`Applied ${filterArray.length} filters for year ${year}`);
+    currentYear = year;
+
+    // Update the info box with total references
+    const totalReferences = getTotalReferencesForYear(year);
+    const infoNumber = document.querySelector(".info-number");
+    const infoYear = document.querySelector(".info-year");
+
+    if (infoNumber && infoYear) {
+      infoNumber.textContent = totalReferences;
+      infoYear.textContent = year;
+    }
+
+    // Update year display text and position
+    updateYearDisplayPosition(year);
+  }
+
+  // Function to update year display position on slider
+  function updateYearDisplayPosition(year) {
+    const yearDisplay = document.getElementById("currentyeartext");
+    const slider = document.getElementById("timeline");
+
+    if (!yearDisplay || !slider) return;
+
+    yearDisplay.textContent = year;
+
+    // Calculate position based on slider value
+    const sliderValue = slider.value;
+    const sliderMax = slider.max;
+    const sliderWidth = slider.offsetWidth;
+
+    // Calculate percentage and position
+    const percentage = sliderValue / sliderMax;
+    const position = percentage * sliderWidth;
+
+    // Update year display position
+    yearDisplay.style.left = position + "px";
+  }
+
+  // Get UI elements
+  const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const dataSourceToggle = document.getElementById("datasource-toggle");
+  const timelineSlider = document.getElementById("timeline");
+  const years = [
+    2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+    2022, 2023, 2024, 2025,
+  ];
+
+  // Set up slider
+  timelineSlider.max = years.length - 1;
+  timelineSlider.value = years.indexOf(currentYear);
+
+  // Auto-play functionality
+  let autoPlayInterval = null;
+  let isPlaying = false;
+
+  function startAutoPlay() {
+    if (isPlaying) return;
+
+    isPlaying = true;
+    playBtn.style.display = "none";
+    pauseBtn.style.display = "flex";
+
+    let yearIndex = years.indexOf(currentYear);
+
+    autoPlayInterval = setInterval(() => {
+      yearIndex = (yearIndex + 1) % years.length;
+      updateFiltersForYear(years[yearIndex]);
+      timelineSlider.value = yearIndex;
+      updateYearDisplayPosition(currentYear);
+    }, 1000);
+  }
+
+  function stopAutoPlay() {
+    if (!isPlaying) return;
+
+    isPlaying = false;
+    playBtn.style.display = "flex";
+    pauseBtn.style.display = "none";
+
+    if (autoPlayInterval) {
+      clearInterval(autoPlayInterval);
+      autoPlayInterval = null;
+    }
+  }
+
+  // Button event listeners
+  if (playBtn && pauseBtn) {
+    playBtn.addEventListener("click", startAutoPlay);
+    pauseBtn.addEventListener("click", stopAutoPlay);
+  }
+
+  if (dataSourceToggle) {
+    dataSourceToggle.addEventListener("change", () => {
+      dataSourceType = dataSourceToggle.checked ? "journal" : "";
+      updateFiltersForYear(currentYear);
+      updateYearDisplay(currentYear);
+    });
+  }
+
+  // Slider event listener
+  if (timelineSlider) {
+    timelineSlider.addEventListener("input", (e) => {
+      const yearIndex = parseInt(e.target.value);
+      const selectedYear = years[yearIndex];
+      updateFiltersForYear(selectedYear);
+      updateYearDisplayPosition(currentYear);
+
+      // Stop auto-play when user manually changes slider
+      if (isPlaying) {
+        stopAutoPlay();
+      }
+    });
+  }
+
+  // Update keyboard controls to work with new system
+  window.addEventListener("keydown", (event) => {
+    const currentIndex = years.indexOf(currentYear);
+
+    switch (event.key) {
+      case "ArrowLeft":
+      case "ArrowDown":
+        if (currentIndex > 0) {
+          updateFiltersForYear(years[currentIndex - 1]);
+          timelineSlider.value = currentIndex - 1;
+          updateYearDisplayPosition(currentYear);
+          if (isPlaying) stopAutoPlay();
+        }
+        break;
+      case "ArrowRight":
+      case "ArrowUp":
+        if (currentIndex < years.length - 1) {
+          updateFiltersForYear(years[currentIndex + 1]);
+          timelineSlider.value = currentIndex + 1;
+          updateYearDisplayPosition(currentYear);
+          if (isPlaying) stopAutoPlay();
+        }
+        break;
+      case " ":
+        event.preventDefault();
+        if (isPlaying) {
+          stopAutoPlay();
+        } else {
+          startAutoPlay();
+        }
+        break;
+    }
+  });
+
+  // Initialize with starting year
+  updateFiltersForYear(currentYear);
+  updateYearDisplay(currentYear);
+
+  // Static filters - no animation for now
+  // Animation will be added later for year-by-year data transitions
+
+  // Interactive year controls via keyboard
+  // window.addEventListener("keydown", (event) => {
+  //   const availableYears = [
+  //     2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+  //     2022, 2023, 2024, 2025,
+  //   ];
+  //   const currentIndex = availableYears.indexOf(currentYear);
+  //
+  //   switch (event.key) {
+  //     case "ArrowLeft":
+  //     case "ArrowDown":
+  //       // Go to previous year
+  //       if (currentIndex > 0) {
+  //         updateFiltersForYear(availableYears[currentIndex - 1]);
+  //       }
+  //       break;
+  //     case "ArrowRight":
+  //     case "ArrowUp":
+  //       // Go to next year
+  //       if (currentIndex < availableYears.length - 1) {
+  //         updateFiltersForYear(availableYears[currentIndex + 1]);
+  //       }
+  //       break;
+  //     case " ": // Spacebar for auto-play
+  //       event.preventDefault();
+  //       startAutoPlay();
+  //       break;
+  //   }
+  // });
+
+  // Auto-play functionality
+  // let autoPlayInterval = null;
+  // function startAutoPlay() {
+  //   if (autoPlayInterval) {
+  //     clearInterval(autoPlayInterval);
+  //     autoPlayInterval = null;
+  //     console.log("Auto-play stopped");
+  //     return;
+  //   }
+  //
+  //   console.log("Auto-play started - press spacebar again to stop");
+  //   const years = [
+  //     2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+  //     2022, 2023, 2024, 2025,
+  //   ];
+  //   let yearIndex = years.indexOf(currentYear);
+  //
+  //   const timelineSlider = document.getElementById("timeline");
+  //   const currentYearText = document.getElementById("currentyeartext");
+  //   timelineSlider.max = years.length;
+  //   timelineSlider.value = yearIndex;
+  //   currentYearText.textContent = currentYear;
+  //
+  //   autoPlayInterval = setInterval(() => {
+  //     yearIndex = (yearIndex + 1) % years.length;
+  //     updateFiltersForYear(years[yearIndex]);
+  //     timelineSlider.value = yearIndex;
+  //     currentYearText.textContent = currentYear;
+  //   }, 1000); // Change year every second
+  // }
+  //
+  // // Interactive features for clicking
+  // app.stage.eventMode = "static";
+  // sprite.eventMode = "static";
+  //
+  // app.stage.on("pointerdown", (event) => {
+  //   const global = event.global;
+  //   const x = global.x / app.screen.width;
+  //   const y = global.y / app.screen.height;
+  //   console.log(
+  //     `\nClick coordinates: { x: ${x.toFixed(5)}, y: ${y.toFixed(5)} }`,
+  //   );
+  //
+  //   // Find the closest water body to the click
+  //   let closestBody = null;
+  //   let minDistance = Infinity;
+  //
+  //   waterBodiesData.forEach((body) => {
+  //     const distance = Math.sqrt(
+  //       Math.pow(body.center.x - x, 2) + Math.pow(body.center.y - y, 2),
+  //     );
+  //     if (distance < minDistance) {
+  //       minDistance = distance;
+  //       closestBody = body;
+  //     }
+  //   });
+  //
+  //   if (closestBody && minDistance < 0.1) {
+  //     // Within reasonable distance
+  //     const trendsValue = closestBody.yearlyData[currentYear];
+  //     console.log(`Closest water body: ${closestBody.name}`);
+  //     console.log(`${currentYear} Google Trends: ${trendsValue}`);
+  //     console.log(`Historical data:`, closestBody.yearlyData);
+  //   }
+  // });
+
+  // Display current year info
+  console.log("\n=== CONTROLS ===");
+  console.log("Arrow Keys: Navigate between years");
+  console.log("Spacebar: Start/stop auto-play through years");
+  console.log("Click: Get info about water bodies");
+  console.log(`\nStarting year: ${currentYear}`);
+
+  // Add a legend or info display
+  console.log("Water Bodies Visualization Loaded");
+  console.log("Radius range:", config.radius.min, "-", config.radius.max);
+  console.log("Strength range:", config.strength.min, "-", config.strength.max);
+  console.log("Logarithmic radius scaling:", config.radius.useLog);
+  console.log("Logarithmic strength scaling:", config.strength.useLog);
 })();
